@@ -1,5 +1,7 @@
 # Deal Check
 
+**→ Start here: [the Deal Check page](https://feridunocek.github.io/deal-check-tool/)** (EN/TR, one-click copy of the prompt, a real run with sources)
+
 **If you know what you need, the solution is simple.**
 
 A five-question thinking system for Black Friday and other sale days. It runs in

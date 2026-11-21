@@ -1,0 +1,683 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta property="og:title" content="Deal Check">
+<meta property="og:description" content="Black Friday için beş soruluk düşünme sistemi. Kendi yapay zekanda çalışır; uygulama, üyelik, sunucu yok. / A five-question shopping check that runs in your own AI.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://feridunocek.github.io/deal-check-tool/">
+<meta name="twitter:card" content="summary">
+<style>html,body{margin:0}[hidden]{display:none!important}img{max-width:100%}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
+<title>Deal Check</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="A five-question thinking system for Black Friday that runs in your own AI. No app, no account, no server.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* Layout: a shop shelf. Yellow shelf-label tag as the hero object, thermal-paper receipts as evidence, verdict stamps as the only loud color. */
+:root{
+  --paper:#EEF1F5; --surface:#FFFFFF; --ink:#121826; --muted:#566074; --line:#D3D9E2;
+  --tag:#FFDD3C; --tag-ink:#121826;
+  --buy:#1D7F47; --wait:#A86A12; --skip:#4F5B6E; --sus:#BF3226;
+  --strike:#BF3226;
+  --display:"Bricolage Grotesque", "Arial Narrow", system-ui, sans-serif;
+  --body:"Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --radius:10px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#0E121A; --surface:#171D28; --ink:#E7EBF2; --muted:#9AA4B6; --line:#2A3242;
+  --buy:#4CC27F; --wait:#E3A23B; --skip:#93A0B5; --sus:#F06A5C; --strike:#F06A5C; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#0E121A; --surface:#171D28; --ink:#E7EBF2; --muted:#9AA4B6; --line:#2A3242;
+  --buy:#4CC27F; --wait:#E3A23B; --skip:#93A0B5; --sus:#F06A5C; --strike:#F06A5C; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font:16px/1.6 var(--body);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+.wrap{max-width:1120px;margin:0 auto;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+h1,h2,h3{font-family:var(--display);line-height:1.05;text-wrap:balance;margin:0;letter-spacing:-.02em}
+p{margin:0}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.eyebrow{font:600 12px/1.2 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+:focus-visible{outline:3px solid var(--tag);outline-offset:3px;border-radius:4px}
+
+/* language */
+#app[data-l="tr"] .en, #app[data-l="en"] .tr{display:none!important}
+
+/* top bar */
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top, 0px);z-index:10;background:var(--paper)}
+.bar{position:sticky;top:env(safe-area-inset-top, 0px);z-index:9;background:color-mix(in srgb, var(--paper) 88%, transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.bar .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:12px}
+.brand{display:flex;align-items:center;gap:10px;font:800 18px/1 var(--display);letter-spacing:-.02em;text-decoration:none}
+.brand i{width:22px;height:16px;background:var(--tag);border-radius:3px 3px 3px 3px;position:relative;display:inline-block;clip-path:polygon(28% 0,100% 0,100% 100%,28% 100%,0 50%)}
+.brand i::after{content:"";position:absolute;left:30%;top:50%;width:4px;height:4px;margin-top:-2px;border-radius:50%;background:var(--ink)}
+.bar nav{display:flex;align-items:center;gap:8px}
+.lang{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:3px;background:var(--surface)}
+.lang button{all:unset;cursor:pointer;font:600 12px/1 var(--mono);letter-spacing:.08em;padding:7px 11px;border-radius:999px;color:var(--muted)}
+.lang button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.gh{display:inline-flex;align-items:center;gap:7px;font:600 13px/1 var(--body);text-decoration:none;padding:9px 13px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
+.gh svg{width:16px;height:16px;fill:currentColor}
+@media (max-width:520px){.gh span{display:none}.gh{padding:8px}}
+
+/* hero */
+.hero{padding-block:clamp(40px,7vw,88px) clamp(40px,6vw,72px)}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:clamp(32px,5vw,72px);align-items:center}
+@media (max-width:860px){.hero .wrap{grid-template-columns:minmax(0,1fr)}}
+.hero h1{font-size:clamp(42px,7.2vw,88px);font-weight:800;margin-top:16px}
+.hero h1 s{text-decoration:none;position:relative;color:var(--muted);white-space:nowrap;display:inline-block}
+.hero h1 s::after{content:"";position:absolute;left:-2%;right:-2%;top:54%;height:.09em;background:var(--strike);transform:rotate(-2.5deg);transform-origin:left;animation:strike .7s .35s cubic-bezier(.6,.1,.2,1) both}
+@keyframes strike{from{transform:rotate(-2.5deg) scaleX(.15)}to{transform:rotate(-2.5deg) scaleX(1)}}
+.lede{font-size:clamp(17px,1.6vw,20px);color:var(--muted);max-width:34em;margin-top:22px}
+.lede b{color:var(--ink);font-weight:600}
+.cta-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+.btn{all:unset;box-sizing:border-box;cursor:pointer;display:inline-flex;align-items:center;gap:10px;font:600 15px/1 var(--body);padding:15px 20px;border-radius:999px;transition:transform .15s ease, box-shadow .15s ease}
+.btn-primary{background:var(--ink);color:var(--paper)}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 8px 22px -10px var(--ink)}
+.btn-ghost{border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+.btn-ghost:hover{border-color:var(--muted)}
+.btn svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.facts{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:26px;font:500 13px/1.4 var(--mono);color:var(--muted)}
+.facts span::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--buy);margin-right:8px;vertical-align:1px}
+
+/* the shelf tag */
+.tagstage{position:relative;display:flex;justify-content:center;padding-top:28px}
+.string{position:absolute;top:0;left:50%;width:2px;height:46px;background:var(--muted);opacity:.5}
+.shelftag{position:relative;width:min(100%,380px);background:var(--tag);color:var(--tag-ink);border-radius:14px;padding:30px 26px 24px;box-shadow:0 30px 60px -30px rgba(18,24,38,.55), 0 2px 0 rgba(0,0,0,.08) inset;transform-origin:50% -20px;animation:swing 2.4s .1s ease-out both}
+@keyframes swing{0%{transform:rotate(-5deg)}35%{transform:rotate(3deg)}65%{transform:rotate(-1.4deg)}100%{transform:rotate(-1deg)}}
+.shelftag::before{content:"";position:absolute;top:12px;left:50%;width:14px;height:14px;margin-left:-7px;border-radius:50%;background:var(--paper);box-shadow:0 0 0 3px rgba(18,24,38,.18) inset}
+.shelftag .prod{font:600 12px/1.3 var(--mono);letter-spacing:.06em;text-transform:uppercase;margin-top:6px}
+.shelftag .seller{font:400 12px/1.3 var(--mono);opacity:.75;margin-top:4px}
+.shelftag .now{font:800 clamp(46px,6vw,60px)/1 var(--display);letter-spacing:-.03em;margin-top:18px;font-variant-numeric:tabular-nums}
+.shelftag .now small{font-size:.42em;font-weight:700;margin-left:4px}
+.shelftag .rule{border-top:2px dashed rgba(18,24,38,.35);margin:18px 0 14px}
+.shelftag dl{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:0;font:500 13px/1.35 var(--mono)}
+.shelftag dt{opacity:.7}
+.shelftag dd{margin:0;text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
+.stamp{position:absolute;right:-14px;bottom:-22px;transform:rotate(-9deg);border:3px solid var(--wait);color:var(--wait);background:var(--surface);font:800 22px/1 var(--display);letter-spacing:.06em;padding:10px 14px 9px;border-radius:8px;animation:stamp .45s 1.1s cubic-bezier(.3,1.6,.5,1) both;box-shadow:0 10px 24px -14px rgba(0,0,0,.5)}
+.stamp small{display:block;font:600 10px/1.2 var(--mono);letter-spacing:.1em;margin-top:4px;opacity:.9}
+@keyframes stamp{from{transform:rotate(-9deg) scale(1.6)}to{transform:rotate(-9deg) scale(1)}}
+.tagnote{font:400 12px/1.5 var(--mono);color:var(--muted);text-align:center;margin-top:40px;max-width:380px;margin-inline:auto}
+
+/* sections */
+section.block{padding-block:clamp(56px,8vw,104px);border-top:1px solid var(--line)}
+.head{display:grid;gap:14px;max-width:44em;margin-bottom:clamp(28px,4vw,48px)}
+.head h2{font-size:clamp(32px,4.6vw,54px);font-weight:800}
+.head p{color:var(--muted);font-size:18px}
+
+/* five questions */
+.qs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px;counter-reset:q;list-style:none;margin:0;padding:0}
+@media (max-width:1000px){.qs{grid-template-columns:repeat(2,minmax(0,1fr))}.qs li:last-child{grid-column:1 / -1}}
+@media (max-width:560px){.qs{grid-template-columns:minmax(0,1fr)}}
+.qs li{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:22px 20px 20px;display:flex;flex-direction:column;gap:12px;min-width:0;transition:border-color .2s ease, transform .2s ease}
+.qs li:hover{border-color:var(--ink);transform:translateY(-2px)}
+.qs .n{font:600 12px/1 var(--mono);letter-spacing:.1em;color:var(--muted);display:flex;justify-content:space-between;align-items:center}
+.qs .n b{font:800 30px/1 var(--display);color:var(--ink);letter-spacing:-.02em}
+.qs h3{font-size:22px;font-weight:700}
+.qs .q{font-size:16px;line-height:1.45}
+.qs .catch{margin-top:auto;padding-top:14px;border-top:1px dashed var(--line);font-size:14px;color:var(--muted);line-height:1.45}
+.qs .catch em{display:block;font:600 11px/1.2 var(--mono);letter-spacing:.1em;text-transform:uppercase;font-style:normal;color:var(--sus);margin-bottom:5px}
+.after{margin-top:22px;font-size:17px;color:var(--muted)}
+.after b{color:var(--ink)}
+
+/* verdicts */
+.verdicts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:40px}
+@media (max-width:860px){.verdicts{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:460px){.verdicts{grid-template-columns:minmax(0,1fr)}}
+.v{display:flex;flex-direction:column;gap:10px;min-width:0}
+.pill{align-self:flex-start;font:800 15px/1 var(--display);letter-spacing:.08em;padding:8px 12px 7px;border-radius:6px;border:2.5px solid currentColor;transform:rotate(-3deg)}
+.v p{font-size:14px;color:var(--muted);line-height:1.5}
+.c-buy{color:var(--buy)}.c-wait{color:var(--wait)}.c-skip{color:var(--skip)}.c-sus{color:var(--sus)}
+
+/* receipts */
+.receipts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;align-items:start}
+@media (max-width:960px){.receipts{grid-template-columns:minmax(0,1fr);max-width:560px}}
+.receipt{position:relative;background:var(--surface);padding:24px 22px 34px;font-family:var(--mono);font-size:13.5px;line-height:1.5;min-width:0;
+  -webkit-mask:linear-gradient(#000 0 0) top/100% calc(100% - 10px) no-repeat, conic-gradient(from -45deg at bottom,#0000,#000 1deg 89deg,#0000 90deg) bottom/20px 10px repeat-x;
+  mask:linear-gradient(#000 0 0) top/100% calc(100% - 10px) no-repeat, conic-gradient(from -45deg at bottom,#0000,#000 1deg 89deg,#0000 90deg) bottom/20px 10px repeat-x;
+  filter:drop-shadow(0 18px 24px rgba(18,24,38,.10))}
+.receipt .top{display:flex;justify-content:space-between;gap:10px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.receipt h3{font:700 22px/1.15 var(--display);letter-spacing:-.01em;margin:14px 0 4px}
+.receipt .why{font:400 13px/1.45 var(--mono);color:var(--muted)}
+.receipt .dash{border-top:1.5px dashed var(--line);margin:16px 0}
+.receipt .row{display:flex;justify-content:space-between;gap:14px;padding:3px 0}
+.receipt .row span:first-child{color:var(--muted)}
+.receipt .row span:last-child{text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
+.receipt .row.hl span:last-child{background:var(--tag);color:var(--tag-ink);padding:0 5px;border-radius:3px}
+.receipt .verdict{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:18px}
+.receipt .verdict .pill{font-size:20px;padding:9px 14px 8px}
+.receipt .reason{font:500 14px/1.45 var(--body);margin-top:14px}
+.runnote{display:flex;flex-wrap:wrap;gap:10px 24px;align-items:center;justify-content:space-between;margin-top:30px;font-size:14px;color:var(--muted)}
+.runnote a{font-weight:600;color:var(--ink);text-underline-offset:3px}
+
+/* how to use */
+.how{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(24px,4vw,56px);align-items:start}
+@media (max-width:900px){.how{grid-template-columns:minmax(0,1fr)}}
+.copycard{background:var(--ink);color:var(--paper);border-radius:16px;padding:28px;display:flex;flex-direction:column;gap:18px;min-width:0}
+.copycard h3{font-size:26px;font-weight:800}
+.copycard p{opacity:.78;font-size:15px}
+.copycard .btn{background:var(--tag);color:var(--tag-ink);align-self:flex-start;font-size:16px;padding:16px 22px}
+.copycard .btn:hover{transform:translateY(-1px)}
+.copycard .btn.done{background:var(--buy);color:#fff}
+.status{font:500 13px/1.4 var(--mono);min-height:1.4em;opacity:.85}
+.copycard details{border-top:1px solid color-mix(in srgb, var(--paper) 20%, transparent);padding-top:14px}
+.copycard summary{cursor:pointer;font:600 13px/1.4 var(--mono);letter-spacing:.04em;opacity:.85}
+.copycard textarea{width:100%;height:220px;margin-top:12px;resize:vertical;border-radius:8px;border:1px solid color-mix(in srgb, var(--paper) 25%, transparent);background:color-mix(in srgb, var(--paper) 7%, transparent);color:var(--paper);font:12px/1.5 var(--mono);padding:12px}
+.minifacts{display:grid;gap:6px;font:500 13px/1.45 var(--mono);opacity:.8}
+
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+.tabs button{all:unset;cursor:pointer;font:600 14px/1 var(--body);padding:11px 16px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--muted)}
+.tabs button[aria-selected="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:26px 26px 22px}
+.steps{list-style:none;margin:0;padding:0;display:grid;gap:16px;counter-reset:s}
+.steps li{display:grid;grid-template-columns:34px minmax(0,1fr);gap:14px;align-items:start;counter-increment:s}
+.steps li::before{content:counter(s);display:grid;place-items:center;width:34px;height:34px;border-radius:50%;border:1.5px solid var(--ink);font:700 14px/1 var(--mono)}
+.steps b{display:block;font-weight:600;margin-bottom:2px}
+.steps span{color:var(--muted);font-size:15px}
+.steps code,.panel code{font:500 13px/1.4 var(--mono);background:var(--paper);border:1px solid var(--line);border-radius:5px;padding:1px 6px;word-break:break-word}
+.panel .extra{margin-top:20px;padding-top:16px;border-top:1px dashed var(--line);font-size:14px;color:var(--muted)}
+.panel .extra b{color:var(--ink)}
+
+/* privacy */
+.privacy{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(28px,5vw,64px);align-items:center}
+@media (max-width:860px){.privacy{grid-template-columns:minmax(0,1fr)}}
+.flow{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:26px;display:grid;gap:14px;font-family:var(--mono);font-size:13px}
+.flow .node{display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:10px;border:1.5px solid var(--ink);font-weight:600}
+.flow .node small{font-weight:400;color:var(--muted);margin-left:auto;text-align:right}
+.flow .arrow{text-align:center;color:var(--muted);line-height:1}
+.flow .node.no{border-style:dashed;border-color:var(--sus);color:var(--sus);text-decoration:line-through;text-decoration-thickness:1.5px}
+.flow .node.no small{color:var(--sus);text-decoration:none}
+.nolist{list-style:none;margin:22px 0 0;padding:0;display:grid;gap:12px}
+.nolist li{display:grid;grid-template-columns:22px minmax(0,1fr);gap:10px;font-size:16px}
+.nolist li::before{content:"";width:16px;height:16px;margin-top:4px;border-radius:50%;border:2px solid var(--buy);background:radial-gradient(circle,var(--buy) 0 3px,transparent 4px)}
+.caveat{margin-top:20px;font-size:14px;color:var(--muted)}
+
+/* closing */
+.closing{padding-block:clamp(64px,9vw,120px)}
+.closing .inner{max-width:52em}
+.closing h2{font-size:clamp(34px,5.4vw,64px);font-weight:800}
+.closing p{font-size:clamp(17px,1.6vw,20px);color:var(--muted);margin-top:22px;max-width:40em}
+.closing p b{color:var(--ink);font-weight:600}
+.closing .cta-row{margin-top:32px}
+
+footer{border-top:1px solid var(--line);padding-block:28px 40px}
+footer .wrap{display:flex;flex-wrap:wrap;gap:10px 24px;justify-content:space-between;font:500 13px/1.5 var(--mono);color:var(--muted)}
+footer a{color:var(--ink);text-underline-offset:3px}
+
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<div id="app" data-l="tr">
+
+<header class="bar">
+  <div class="wrap">
+    <a class="brand" href="#top"><i aria-hidden="true"></i>Deal Check</a>
+    <nav>
+      <div class="lang" role="group" aria-label="Language">
+        <button type="button" id="l-tr" data-set="tr" aria-pressed="true">TR</button>
+        <button type="button" id="l-en" data-set="en" aria-pressed="false">EN</button>
+      </div>
+      <a class="gh" href="https://github.com/feridunocek/deal-check-tool" target="_blank" rel="noopener">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+        <span>GitHub</span>
+      </a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <p class="eyebrow"><span class="tr">Black Friday · Efsane Cuma · yılbaşı indirimleri</span><span class="en">Black Friday · Cyber Monday · year-end sales</span></p>
+      <h1>
+        <span class="tr">Üstü <s>çizili</s> fiyat, satıcının hikayesi.</span>
+        <span class="en">The <s>struck-through</s> price is the seller's story.</span>
+      </h1>
+      <p class="lede">
+        <span class="tr">Deal Check beş soruluk bir düşünme sistemi. Almak istediklerinin listesini <b>zaten kullandığın yapay zekaya</b> verirsin; her ürünü beş soruyla kontrol eder ve tıklayıp doğrulayabileceğin linklerle <b>AL, BEKLE, ATLA</b> ya da <b>ŞÜPHELİ</b> der.</span>
+        <span class="en">Deal Check is a five-question thinking system. You give your wishlist to <b>the AI you already use</b>; it checks every item against five questions and says <b>BUY, WAIT, SKIP</b> or <b>SUSPICIOUS</b>, with links you can click to check it yourself.</span>
+      </p>
+      <div class="cta-row">
+        <button class="btn btn-primary" type="button" data-copy id="copy-hero">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+          <span class="tr">Promptu kopyala</span><span class="en">Copy the prompt</span>
+        </button>
+        <a class="btn btn-ghost" href="#run">
+          <span class="tr">Gerçek bir denemeyi gör</span><span class="en">See a real run</span>
+        </a>
+      </div>
+      <p class="status" id="status-hero" aria-live="polite" style="margin-top:12px;color:var(--muted)"></p>
+      <div class="facts">
+        <span class="tr">Uygulama yok</span><span class="en">No app</span>
+        <span class="tr">Üyelik yok</span><span class="en">No account</span>
+        <span class="tr">Sunucu yok</span><span class="en">No server</span>
+        <span class="tr">Ücretsiz, MIT lisanslı</span><span class="en">Free, MIT licensed</span>
+      </div>
+    </div>
+
+    <div>
+      <div class="tagstage">
+        <div class="string" aria-hidden="true"></div>
+        <div class="shelftag" role="img" aria-label="Sony WH-1000XM5: 14,389 TL today, 30-day low 12,950 TL on 19 Nov 2026, verdict WAIT">
+          <p class="prod">Sony WH-1000XM5</p>
+          <p class="seller"><span class="tr">Hepsiburada · Türkiye · 21.11.2026</span><span class="en">Hepsiburada · Turkey · 21 Nov 2026</span></p>
+          <p class="now"><span class="tr">14.389</span><span class="en">14,389</span><small>TL</small></p>
+          <div class="rule"></div>
+          <dl>
+            <dt><span class="tr">30 günün en düşüğü</span><span class="en">30-day low</span></dt>
+            <dd><span class="tr">12.950 TL · 19.11</span><span class="en">12,950 TL · 19 Nov</span></dd>
+            <dt><span class="tr">Fark</span><span class="en">Gap</span></dt>
+            <dd>+11%</dd>
+            <dt><span class="tr">Almanya, bagajda</span><span class="en">Germany, in luggage</span></dt>
+            <dd><span class="tr">≈11.024 TL</span><span class="en">≈11,024 TL</span></dd>
+          </dl>
+          <div class="stamp"><span class="tr">BEKLE</span><span class="en">WAIT</span><small><span class="tr">28 KASIM'A KADAR</span><span class="en">UNTIL 28 NOV</span></small></div>
+        </div>
+      </div>
+      <p class="tagnote"><span class="tr">21 Kasım denemesinden gerçek bir satır. Kaynaklar: Akakçe, Geizhals, TCMB.</span><span class="en">A real line from the 21 November run. Sources: Akakçe, Geizhals, TCMB.</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- FIVE QUESTIONS -->
+<section class="block" id="questions">
+  <div class="wrap">
+    <div class="head">
+      <p class="eyebrow"><span class="tr">Sistem</span><span class="en">The system</span></p>
+      <h2><span class="tr">Beş soru. Her ürün için, aynı sırayla.</span><span class="en">Five questions. Every item, same order.</span></h2>
+      <p><span class="tr">İndirim günlerinde yirmi sekme açıp acele karar veririz. İşe yarayan sorular başka.</span><span class="en">On sale days we open twenty tabs and decide in a hurry. The useful questions are different.</span></p>
+    </div>
+    <ol class="qs">
+      <li>
+        <p class="n"><span class="tr">SORU</span><span class="en">QUESTION</span><b>1</b></p>
+        <h3><span class="tr">İhtiyaç</span><span class="en">Need</span></h3>
+        <p class="q"><span class="tr">Bunu gelecek ay tam fiyata alır mıydım?</span><span class="en">Would I buy this at full price next month?</span></p>
+        <p class="catch"><em><span class="tr">Yakaladığı</span><span class="en">Catches</span></em><span class="tr">İhtiyaç yüzünden değil, indirim yüzünden almak.</span><span class="en">Buying because of the discount, not the need.</span></p>
+      </li>
+      <li>
+        <p class="n"><span class="tr">SORU</span><span class="en">QUESTION</span><b>2</b></p>
+        <h3><span class="tr">Gerçek fiyat</span><span class="en">Real price</span></h3>
+        <p class="q"><span class="tr">Son 30 günün en düşük fiyatı neydi?</span><span class="en">What was the lowest price in the last 30 days?</span></p>
+        <p class="catch"><em><span class="tr">Yakaladığı</span><span class="en">Catches</span></em><span class="tr">İndirimden önce yükseltilip sonra "düşürülen" fiyatlar.</span><span class="en">Prices raised before the sale, then "reduced".</span></p>
+      </li>
+      <li>
+        <p class="n"><span class="tr">SORU</span><span class="en">QUESTION</span><b>3</b></p>
+        <h3><span class="tr">Aynı ürün mü?</span><span class="en">Same product?</span></h3>
+        <p class="q"><span class="tr">Model numarası tam olarak düşündüğüm ürün mü?</span><span class="en">Is this the exact model I think it is?</span></p>
+        <p class="catch"><em><span class="tr">Yakaladığı</span><span class="en">Catches</span></em><span class="tr">Tanıdık bir isim altında satılan, daha zayıf indirim günü sürümleri.</span><span class="en">Cheaper sale-day variants under a familiar name.</span></p>
+      </li>
+      <li>
+        <p class="n"><span class="tr">SORU</span><span class="en">QUESTION</span><b>4</b></p>
+        <h3><span class="tr">Alternatif</span><span class="en">Alternative</span></h3>
+        <p class="q"><span class="tr">Aynı ihtiyaç için daha iyi bir seçenek var mı?</span><span class="en">Is there a better option for the same need?</span></p>
+        <p class="catch"><em><span class="tr">Yakaladığı</span><span class="en">Catches</span></em><span class="tr">Önceki nesil, yenilenmiş, başka satıcı, aynı model yurt dışında (kargo, gümrük, vergi dahil).</span><span class="en">Previous generation, refurbished, another seller, the same model abroad (shipping, customs and tax included).</span></p>
+      </li>
+      <li>
+        <p class="n"><span class="tr">SORU</span><span class="en">QUESTION</span><b>5</b></p>
+        <h3><span class="tr">Zamanlama</span><span class="en">Timing</span></h3>
+        <p class="q"><span class="tr">Yakında ucuzlayacak ya da yenisi çıkacak mı?</span><span class="en">Will it be cheaper or better soon?</span></p>
+        <p class="catch"><em><span class="tr">Yakaladığı</span><span class="en">Catches</span></em><span class="tr">Gelecek ay çıkacak yeni model, ocakta gelecek daha iyi fırsat.</span><span class="en">A new model next month, a better deal in January.</span></p>
+      </li>
+    </ol>
+    <p class="after"><span class="tr"><b>Araç sorulardır.</b> Yapay zeka sadece ayak işini yapar.</span><span class="en"><b>The tool is the questions.</b> The AI only does the legwork.</span></p>
+
+    <div class="verdicts">
+      <div class="v"><span class="pill c-buy"><span class="tr">AL</span><span class="en">BUY</span></span><p><span class="tr">İhtiyacın var, fiyat gerçekten iyi, yakında daha iyisi gelmiyor.</span><span class="en">You need it, the price is genuinely good, nothing better is coming soon.</span></p></div>
+      <div class="v"><span class="pill c-wait"><span class="tr">BEKLE</span><span class="en">WAIT</span></span><p><span class="tr">Yakında ucuzlaması ya da yenisinin çıkması muhtemel, ya da acil değil.</span><span class="en">Likely cheaper or better soon, or not urgent.</span></p></div>
+      <div class="v"><span class="pill c-skip"><span class="tr">ATLA</span><span class="en">SKIP</span></span><p><span class="tr">Aslında ihtiyacın yok, ya da açıkça daha iyi bir alternatif var.</span><span class="en">You do not really need it, or a clearly better alternative exists.</span></p></div>
+      <div class="v"><span class="pill c-sus"><span class="tr">ŞÜPHELİ</span><span class="en">SUSPICIOUS</span></span><p><span class="tr">İndirim şişirilmiş görünüyor, model tuhaf bir sürüm ya da satıcı güven vermiyor.</span><span class="en">The discount looks inflated, the model is an odd variant, or the seller looks unreliable.</span></p></div>
+    </div>
+  </div>
+</section>
+
+<!-- REAL RUN -->
+<section class="block" id="run">
+  <div class="wrap">
+    <div class="head">
+      <p class="eyebrow"><span class="tr">Canlı deneme · 21 Kasım 2026</span><span class="en">Live run · 21 November 2026</span></p>
+      <h2><span class="tr">Üç ürün, üç ülke. Hiçbiri AL çıkmadı.</span><span class="en">Three items, three countries. None came out BUY.</span></h2>
+      <p><span class="tr">Liste: kırılan bir kulaklık, "olsa iyi olur" bir AirPods, hangisi olduğuna karar verilmemiş bir robot süpürge. Her fiyatın yanında link ve tarih var.</span><span class="en">The list: headphones to replace a broken pair, "nice to have" AirPods, and a robot vacuum with no model picked yet. Every price comes with a link and a date.</span></p>
+    </div>
+
+    <div class="receipts">
+      <article class="receipt">
+        <div class="top"><span><span class="tr">Türkiye</span><span class="en">Turkey</span></span><span>21.11.2026</span></div>
+        <h3>Sony WH-1000XM5</h3>
+        <p class="why"><span class="tr">"Eskisi bozuldu"</span><span class="en">"My old ones broke"</span></p>
+        <div class="dash"></div>
+        <div class="row"><span><span class="tr">Bugün, Hepsiburada</span><span class="en">Today, Hepsiburada</span></span><span><span class="tr">14.389 TL</span><span class="en">14,389 TL</span></span></div>
+        <div class="row hl"><span><span class="tr">30 günün en düşüğü</span><span class="en">30-day low</span></span><span><span class="tr">12.950 TL · 19.11</span><span class="en">12,950 TL · 19 Nov</span></span></div>
+        <div class="row"><span><span class="tr">Almanya, bagajda</span><span class="en">Germany, in luggage</span></span><span><span class="tr">≈11.024 TL</span><span class="en">≈11,024 TL</span></span></div>
+        <div class="row"><span><span class="tr">Almanya, kargoyla</span><span class="en">Germany, by parcel</span></span><span><span class="tr">bulunamadı</span><span class="en">not found</span></span></div>
+        <div class="dash"></div>
+        <div class="verdict"><span class="pill c-wait"><span class="tr">BEKLE</span><span class="en">WAIT</span></span><span style="color:var(--muted);font-size:12px"><span class="tr">karar: 28.11</span><span class="en">decide by 28 Nov</span></span></div>
+        <p class="reason"><span class="tr">İhtiyaç gerçek ama bugünkü fiyat iki gün öncekinden %11 yüksek. 28 Kasım'a kadar bekle.</span><span class="en">You need it, but today's price is 11% above where it was two days ago. Give it until 28 Nov.</span></p>
+      </article>
+
+      <article class="receipt">
+        <div class="top"><span><span class="tr">Almanya</span><span class="en">Germany</span></span><span>21.11.2026</span></div>
+        <h3>Apple AirPods Pro 3</h3>
+        <p class="why"><span class="tr">"Olsa iyi olur"</span><span class="en">"Nice to have"</span></p>
+        <div class="dash"></div>
+        <div class="row"><span><span class="tr">Bugün, Amazon.de</span><span class="en">Today, Amazon.de</span></span><span><span class="tr">199,99 €</span><span class="en">€199.99</span></span></div>
+        <div class="row"><span><span class="tr">30 günün en düşüğü</span><span class="en">30-day low</span></span><span><span class="tr">187,19 €</span><span class="en">€187.19</span></span></div>
+        <div class="row hl"><span><span class="tr">6 aylık medyan</span><span class="en">6-month median</span></span><span><span class="tr">199,00 €</span><span class="en">€199.00</span></span></div>
+        <div class="row"><span><span class="tr">ABD, KDV dahil</span><span class="en">US, with import VAT</span></span><span><span class="tr">≥194,16 €</span><span class="en">≥€194.16</span></span></div>
+        <div class="dash"></div>
+        <div class="verdict"><span class="pill c-skip"><span class="tr">ATLA</span><span class="en">SKIP</span></span><span style="color:var(--muted);font-size:12px"><span class="tr">alarm: ~180 €</span><span class="en">alert at ~€180</span></span></div>
+        <p class="reason"><span class="tr">İhtiyaç değil. 199,99 € de fırsat değil, son altı ayın medyan fiyatı.</span><span class="en">Not a need, and €199.99 is the median price, not a deal.</span></p>
+      </article>
+
+      <article class="receipt">
+        <div class="top"><span><span class="tr">Hollanda</span><span class="en">Netherlands</span></span><span>21.11.2026</span></div>
+        <h3><span class="tr">Robot süpürge, 300 € altı</span><span class="en">Robot vacuum under €300</span></h3>
+        <p class="why"><span class="tr">"Hangisi olsun, emin değilim" · Dreame D20 Pro Plus</span><span class="en">"Not sure which one" · Dreame D20 Pro Plus</span></p>
+        <div class="dash"></div>
+        <div class="row"><span><span class="tr">Bugün, Coolblue ve bol</span><span class="en">Today, Coolblue and bol</span></span><span><span class="tr">199 €</span><span class="en">€199</span></span></div>
+        <div class="row hl"><span><span class="tr">30 günün en düşüğü</span><span class="en">30-day low</span></span><span><span class="tr">179 € · 29.10</span><span class="en">€179 · 29 Oct</span></span></div>
+        <div class="row"><span><span class="tr">Eylülden beri</span><span class="en">Since September</span></span><span><span class="tr">çoğunlukla 199 €</span><span class="en">mostly €199</span></span></div>
+        <div class="row"><span><span class="tr">Yenilenmiş, Coolblue</span><span class="en">Refurbished, Coolblue</span></span><span><span class="tr">190 €'dan</span><span class="en">from €190</span></span></div>
+        <div class="dash"></div>
+        <div class="verdict"><span class="pill c-wait"><span class="tr">BEKLE</span><span class="en">WAIT</span></span><span style="color:var(--muted);font-size:12px"><span class="tr">önce özellikleri seç</span><span class="en">pick features first</span></span></div>
+        <p class="reason"><span class="tr">199 € eylülden beri her günkü fiyatı ve henüz model seçilmedi.</span><span class="en">€199 has been its everyday price since September, and you have not picked a model yet.</span></p>
+      </article>
+    </div>
+
+    <div class="runnote">
+      <p><span class="tr">Fiyatlar her gün değişir; bu sayfa bugünün fırsatlarını değil, cevabın biçimini gösterir. Türkiye'de 1 Ağustos 2026'dan beri indirim, satıcının son 10 gündeki en düşük fiyatına göre ölçülüyor; deneme bunu da kontrol etti.</span><span class="en">Prices change daily; this shows the format of the answer, not today's deals. The run also checked each country's discount rule: 30 days in Germany and the Netherlands, 10 days in Turkey since 1 August 2026.</span></p>
+      <a href="https://github.com/feridunocek/deal-check-tool/blob/main/examples/example-2026-11-21.md" target="_blank" rel="noopener"><span class="tr">Tam çıktı ve tüm kaynak linkleri →</span><span class="en">Full output with every source link →</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- HOW TO USE -->
+<section class="block" id="use">
+  <div class="wrap">
+    <div class="head">
+      <p class="eyebrow"><span class="tr">Kullanım · 2 dakika</span><span class="en">How to use · 2 minutes</span></p>
+      <h2><span class="tr">Kopyala, yapıştır, listeni ekle.</span><span class="en">Copy, paste, add your list.</span></h2>
+      <p><span class="tr">Web araması açık her yapay zeka sohbetinde çalışır: ChatGPT, Gemini, Claude, Perplexity, Copilot. Türkçe yazarsan Türkçe cevap verir.</span><span class="en">Works in any AI chat with web search on: ChatGPT, Gemini, Claude, Perplexity, Copilot. It answers in the language you write in.</span></p>
+    </div>
+
+    <div class="how">
+      <div class="copycard">
+        <p class="eyebrow" style="color:inherit;opacity:.7">PROMPT.md</p>
+        <h3><span class="tr">Tüm sistem tek bir metin.</span><span class="en">The whole system is one text.</span></h3>
+        <p><span class="tr">Beş soru, karar kuralları ve "kaynağı olmayan fiyatı yazma" kuralı. Kopyala, yeni bir sohbete yapıştır, en alta listeni yaz.</span><span class="en">Five questions, the verdict rules and the "no source, no price" rule. Copy it, paste it into a new chat, write your list at the bottom.</span></p>
+        <button class="btn" type="button" data-copy id="copy-main">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+          <span class="lbl"><span class="tr">Promptu panoya kopyala</span><span class="en">Copy prompt to clipboard</span></span>
+        </button>
+        <p class="status" id="status-main" aria-live="polite"></p>
+        <div class="minifacts">
+          <span class="tr">Liste örneği: "Sony WH-1000XM5 · Türkiye · eskisi bozuldu"</span><span class="en">List example: "Sony WH-1000XM5 · Turkey · my old ones broke"</span>
+        </div>
+        <details id="prompt-details">
+          <summary><span class="tr">Metni göster</span><span class="en">Show the text</span></summary>
+          <textarea id="prompt" readonly spellcheck="false" aria-label="PROMPT.md">You are my deal checker for this shopping season (Black Friday, Cyber Monday,
+Efsane Cuma, end-of-year sales). I will give you a list of things I am thinking
+of buying. Your job is not to make me buy. Your job is to help me decide
+clearly, with evidence I can click.
+
+## Before you start
+
+- You need live web search. If you cannot browse the web right now, say so in
+  one line and stop. Never estimate a price from memory.
+- Answer in the language I write in. Use the currency of the country I buy in.
+- If my list does not say it, ask me once, in a single message: (1) which
+  country I buy in, (2) my total budget (optional), (3) by when I must decide.
+  Then do the work without further questions.
+
+## Run these five checks for every item
+
+If an item is a category, not a product ("a robot vacuum under 300 EUR"),
+pick 1-2 concrete models that fit and say in one line why you picked them.
+
+1. **Need.** Would I buy this at full price next month? If the honest answer is
+   no, the discount is the reason, not the need. Say so plainly. If my list
+   gives a reason ("my old one broke"), use it.
+2. **Real price.** Find the current price at 2-3 sellers in my country. The
+   struck-through "was" price is not evidence. Look for the price history and
+   compare today's price with the lowest price of the last 30 days, and of the
+   last 90 days where you can find it. In many places (EU countries, Turkey and
+   others) the law says a "discount" must be measured against the seller's
+   own recent lowest price; the period differs by country and changes, so
+   search the current rule for my country. The 30-day low you find is usually
+   market-wide, so only call a discount misleading when that seller's own
+   "was" price is clearly above it.
+3. **Same product?** Check the exact model number. Some products are made as
+   cheaper "special editions" for sale days, with lower specs under a familiar
+   name. Flag it if the deal is on a variant I would not expect.
+4. **Alternative.** One better option if it exists: the previous generation, a
+   competitor, refurbished or second-hand, or the same model at a cheaper
+   trustworthy seller. Also check the same model **abroad**: its price in 1-2
+   countries where it is usually cheaper and that ship to me (or where I or
+   someone I know might travel). Compare the *landed* price, not the shelf
+   price, for both routes: by parcel (shipping, customs duty, import VAT and
+   carrier fees; export orders often drop the origin country's VAT) and in a
+   traveller's luggage (my country's duty-free allowance). Use the current
+   rules of my country and the latest official exchange rate, with its date. Say whether the warranty
+   is valid in my country and whether the model matches mine (plug, keyboard
+   layout, regional version). Only call it cheaper abroad if the landed price
+   is clearly lower.
+5. **Timing.** Is a new model expected within about 3 months? Does this kind of
+   item usually get cheaper later (Cyber Monday, December, January sales)? What
+   is the return window if I change my mind?
+
+## Verdict
+
+Give each item exactly one verdict with one sentence of reason:
+
+- **BUY** — I need it, the price is genuinely good, nothing better is coming soon.
+- **WAIT** — likely cheaper or better soon, or not urgent.
+- **SKIP** — I do not really need it, or a clearly better alternative exists.
+- **SUSPICIOUS** — the discount looks inflated, the model is an odd variant, or
+  the seller looks unreliable.
+
+## Hard rules
+
+- Every price comes with a link and the date you saw it. No link means you
+  write "not found". Never fill a gap with a guess.
+- If you cannot find price history, say so and tell me where I can check it
+  myself (for example Keepa or camelcamelcamel for Amazon, Akakçe or Cimri in
+  Turkey, idealo in Germany, PriceSpy or Google Shopping price insights
+  elsewhere).
+- Do not push. SKIP and WAIT are good answers.
+- Clean links: remove tracking and affiliate parameters (utm_, ref=, tag=...).
+- Keep it short. I want to decide, not read an essay.
+
+## Output
+
+1. **Summary table:** Item | Best price found (seller + link) | 30-day low |
+   Abroad, landed (country) | Verdict | Why (one line)
+2. **One short card per item** with the five checks, 1-2 lines each.
+3. **Total:** what buying every BUY item would cost, compared with my budget.
+4. **Before you pay:** at most 3 things I should check myself.
+
+## My list
+
+&lt;!-- One item per line. Add the country, a link if you have one, and why you want it.
+Example:
+- Sony WH-1000XM5 headphones — Turkey — my old ones broke
+- https://www.amazon.de/dp/... — Germany — nice to have
+- Robot vacuum under 300 EUR — Netherlands — not sure which one
+--&gt;
+</textarea>
+        </details>
+      </div>
+
+      <div>
+        <div class="tabs" role="tablist" aria-label="AI assistant">
+          <button type="button" role="tab" id="t-gpt" aria-controls="p-gpt" aria-selected="true">ChatGPT</button>
+          <button type="button" role="tab" id="t-gem" aria-controls="p-gem" aria-selected="false">Gemini</button>
+          <button type="button" role="tab" id="t-cl" aria-controls="p-cl" aria-selected="false">Claude</button>
+        </div>
+
+        <div class="panel" role="tabpanel" id="p-gpt" aria-labelledby="t-gpt">
+          <ol class="steps">
+            <li><div><b><span class="tr">Yeni bir sohbet aç</span><span class="en">Open a new chat</span></b><span><span class="tr">Web aramasının açık olduğundan emin ol. Kapalıysa prompt bunu söyleyip durur, tahminle fiyat yazmaz.</span><span class="en">Make sure web search is on. If it is off, the prompt says so and stops instead of guessing prices.</span></span></div></li>
+            <li><div><b><span class="tr">Promptu yapıştır</span><span class="en">Paste the prompt</span></b><span><span class="tr">Soldaki düğmeyle kopyaladığın metni olduğu gibi yapıştır.</span><span class="en">Paste the text you copied with the button, as it is.</span></span></div></li>
+            <li><div><b><span class="tr">Listeni en alta yaz, gönder</span><span class="en">Add your list at the bottom, send</span></b><span><span class="tr">Her satıra bir ürün: ad ya da link, ülke, neden istediğin.</span><span class="en">One item per line: name or link, country, why you want it.</span></span></div></li>
+          </ol>
+          <p class="extra"><span class="tr"><b>Kalıcı yapmak için:</b> bir Custom GPT oluştur, promptu ("My list" kısmı hariç) talimat alanına yapıştır, web aramasını açık bırak.</span><span class="en"><b>To keep it:</b> create a Custom GPT, paste the prompt (without "My list") into the instructions, keep web search on.</span></p>
+        </div>
+
+        <div class="panel" role="tabpanel" id="p-gem" aria-labelledby="t-gem" hidden>
+          <ol class="steps">
+            <li><div><b><span class="tr">gemini.google.com'da yeni sohbet aç</span><span class="en">Open a new chat at gemini.google.com</span></b><span><span class="tr">Gemini web'de arama yapabilir; fiyatlar için bu şart.</span><span class="en">Gemini can search the web; prices need that.</span></span></div></li>
+            <li><div><b><span class="tr">Promptu yapıştır</span><span class="en">Paste the prompt</span></b><span><span class="tr">Kopyaladığın metni olduğu gibi yapıştır.</span><span class="en">Paste the copied text as it is.</span></span></div></li>
+            <li><div><b><span class="tr">Listeni en alta yaz, gönder</span><span class="en">Add your list at the bottom, send</span></b><span><span class="tr">Ülke ve karar tarihi yoksa bir kez sorar, sonra işe koyulur.</span><span class="en">If country or deadline is missing it asks once, then gets to work.</span></span></div></li>
+          </ol>
+          <p class="extra"><span class="tr"><b>Kalıcı yapmak için:</b> bir Gem oluştur ve promptu ("My list" kısmı hariç) talimatlarına yapıştır.</span><span class="en"><b>To keep it:</b> create a Gem and paste the prompt (without "My list") into its instructions.</span></p>
+        </div>
+
+        <div class="panel" role="tabpanel" id="p-cl" aria-labelledby="t-cl" hidden>
+          <ol class="steps">
+            <li><div><b><span class="tr">claude.ai'da web aramasını aç</span><span class="en">Turn on web search at claude.ai</span></b><span><span class="tr">Sonra yeni bir sohbet başlat.</span><span class="en">Then start a new chat.</span></span></div></li>
+            <li><div><b><span class="tr">Promptu yapıştır, listeni ekle</span><span class="en">Paste the prompt, add your list</span></b><span><span class="tr">Ya da bir Project açıp promptu talimatlara koy.</span><span class="en">Or open a Project and put the prompt in its instructions.</span></span></div></li>
+            <li><div><b><span class="tr">Ya da skill olarak kur</span><span class="en">Or install it as a skill</span></b><span><span class="tr">Repodaki <code>skills/deal-check/</code> klasörünü zip'le, ayarlarda Skills altına yükle. Sonra sadece "listemi kontrol et" de.</span><span class="en">Zip the <code>skills/deal-check/</code> folder from the repo and upload it under Skills in settings. Then just say "check my wishlist".</span></span></div></li>
+          </ol>
+          <p class="extra"><span class="tr"><b>Claude Code:</b> <code>skills/deal-check/</code> klasörünü <code>~/.claude/skills/</code> içine kopyala.</span><span class="en"><b>Claude Code:</b> copy <code>skills/deal-check/</code> into <code>~/.claude/skills/</code>.</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRIVACY -->
+<section class="block" id="privacy">
+  <div class="wrap privacy">
+    <div>
+      <p class="eyebrow"><span class="tr">Gizlilik</span><span class="en">Privacy</span></p>
+      <h2 style="font-size:clamp(32px,4.6vw,54px);font-weight:800;margin-top:14px"><span class="tr">Verin bize gelmez.</span><span class="en">Your data never reaches us.</span></h2>
+      <ul class="nolist">
+        <li><span class="tr">Sunucu yok, hesap yok. Listen sadece sen ve kendi yapay zekan arasında kalır.</span><span class="en">No server, no account. Your list stays between you and your own AI.</span></li>
+        <li><span class="tr">Ortaklık (affiliate) linki yok, takip parametresi yok; prompt bunları linklerden siler.</span><span class="en">No affiliate links, no tracking parameters; the prompt strips them from links.</span></li>
+        <li><span class="tr">Tahmin yok. Kaynağı olmayan fiyat "bulunamadı" diye yazılır.</span><span class="en">No guessing. A price without a source is written as "not found".</span></li>
+        <li><span class="tr">Senin yerine karar vermez. Kanıtı ve kararı gösterir, ödemeden önce sen tıklayıp bakarsın.</span><span class="en">It does not decide for you. It shows the evidence and a verdict; you click and check before you pay.</span></li>
+      </ul>
+      <p class="caveat"><span class="tr">Yapay zeka yine de yanılabilir, fiyatlar saatlik değişir. Cevabı iyi hazırlanmış bir ikinci görüş olarak oku.</span><span class="en">AI can still be wrong, and prices change by the hour. Treat the answer as a well-prepared second opinion.</span></p>
+    </div>
+    <div class="flow" aria-label="Data flow">
+      <div class="node"><span class="tr">Senin listen</span><span class="en">Your list</span><small><span class="tr">senin cihazın</span><span class="en">your device</span></small></div>
+      <div class="arrow" aria-hidden="true">↓</div>
+      <div class="node"><span class="tr">Senin yapay zekan</span><span class="en">Your own AI</span><small>ChatGPT · Gemini · Claude</small></div>
+      <div class="arrow" aria-hidden="true">↓</div>
+      <div class="node"><span class="tr">Kaynaklı cevap</span><span class="en">Answer with sources</span><small><span class="tr">sadece sana</span><span class="en">only to you</span></small></div>
+      <div class="node no">Deal Check<small><span class="tr">sunucu yok, kayıt yok</span><span class="en">no server, nothing stored</span></small></div>
+    </div>
+  </div>
+</section>
+
+<!-- CLOSING -->
+<section class="block closing">
+  <div class="wrap">
+    <div class="inner">
+      <p class="eyebrow"><span class="tr">Kendine göre değiştir</span><span class="en">Make it yours</span></p>
+      <h2 style="margin-top:14px"><span class="tr">Nasıl düşündüğünü bir kez yaz. Gerisini yapay zeka yürütür.</span><span class="en">Write down how you think once. The AI runs it from there.</span></h2>
+      <p><span class="tr">Prompt düz bir metin dosyası. Soruları değiştir, kendi kurallarını ekle ("yenilenmiş önerme", "sadece şu üç mağaza"), çevir. <b>Bu beş soru alışveriş için yazıldı; aynı yöntem bir teklifi, bir tedarikçiyi ya da bir işe alım kararını tartmak için de işler.</b></span><span class="en">The prompt is a plain text file. Change the questions, add your own rules ("never recommend refurbished", "only these three shops"), translate it. <b>These five questions were written for shopping; the same method works for weighing a quote, a supplier or a hiring decision.</b></span></p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="https://github.com/feridunocek/deal-check-tool" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>
+          <span class="tr">Repoyu GitHub'da aç</span><span class="en">Open the repo on GitHub</span>
+        </a>
+        <button class="btn btn-ghost" type="button" data-copy id="copy-end">
+          <span class="tr">Promptu kopyala</span><span class="en">Copy the prompt</span>
+        </button>
+      </div>
+      <p class="status" id="status-end" aria-live="polite" style="margin-top:12px;font-size:13px"></p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Feridun Öcek · <a href="https://ocekdigital.com" target="_blank" rel="noopener">ocekdigital.com</a></span>
+    <span><span class="tr">MIT lisansı · ücretsiz, kopyala ve değiştir</span><span class="en">MIT License · free to copy and change</span></span>
+  </div>
+</footer>
+
+</div>
+
+<script>
+(function(){
+  var app = document.getElementById('app');
+  function setLang(l){
+    app.setAttribute('data-l', l);
+    document.documentElement.lang = l;
+    document.querySelectorAll('.lang button').forEach(function(b){ b.setAttribute('aria-pressed', String(b.dataset.set === l)); });
+    document.querySelectorAll('.status').forEach(function(s){ s.textContent = ''; });
+    try { localStorage.setItem('dc-lang', l); } catch(e){}
+  }
+  var saved = null;
+  try { saved = localStorage.getItem('dc-lang'); } catch(e){}
+  var nav = (navigator.language || 'tr').toLowerCase();
+  setLang(saved || (nav.indexOf('tr') === 0 ? 'tr' : 'en'));
+  document.querySelectorAll('.lang button').forEach(function(b){ b.addEventListener('click', function(){ setLang(b.dataset.set); }); });
+
+  // copy
+  var ta = document.getElementById('prompt');
+  var msgs = {
+    ok: {tr:'Kopyalandı. Yeni bir sohbete yapıştır, listeni en alta yaz.', en:'Copied. Paste it into a new chat and add your list at the bottom.'},
+    fail: {tr:'Otomatik kopyalama engellendi. Metni seçtim: Cmd/Ctrl + C ile kopyala.', en:'Automatic copy was blocked. The text is selected: press Cmd/Ctrl + C.'}
+  };
+  function statusFor(btn){
+    var id = btn.id === 'copy-hero' ? 'status-hero' : btn.id === 'copy-end' ? 'status-end' : 'status-main';
+    return document.getElementById(id);
+  }
+  function fallback(btn){
+    var d = document.getElementById('prompt-details');
+    d.open = true;
+    ta.focus(); ta.select();
+    statusFor(btn).textContent = msgs.fail[app.getAttribute('data-l')];
+  }
+  document.querySelectorAll('[data-copy]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var l = app.getAttribute('data-l');
+      function ok(){
+        statusFor(btn).textContent = msgs.ok[l];
+        btn.classList.add('done');
+        setTimeout(function(){ btn.classList.remove('done'); }, 2200);
+      }
+      // 1) synchronous copy inside the click (works in frames without clipboard-write permission)
+      var tmp = document.createElement('textarea');
+      tmp.value = ta.value; tmp.setAttribute('readonly', '');
+      tmp.style.cssText = 'position:fixed;top:0;left:-9999px;opacity:0';
+      document.body.appendChild(tmp);
+      tmp.select(); tmp.setSelectionRange(0, tmp.value.length);
+      var done = false;
+      try { done = document.execCommand('copy'); } catch(e){}
+      document.body.removeChild(tmp);
+      btn.focus({preventScroll:true});
+      if (done) { ok(); return; }
+      // 2) async clipboard API
+      try {
+        navigator.clipboard.writeText(ta.value).then(ok, function(){ fallback(btn); });
+      } catch(e){ fallback(btn); }
+    });
+  });
+
+  // tabs
+  var tabs = document.querySelectorAll('[role="tab"]');
+  tabs.forEach(function(t){
+    t.addEventListener('click', function(){
+      tabs.forEach(function(o){
+        var on = o === t;
+        o.setAttribute('aria-selected', String(on));
+        document.getElementById(o.getAttribute('aria-controls')).hidden = !on;
+      });
+    });
+  });
+})();
+</script>
+</body>
+</html>
