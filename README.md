@@ -2,6 +2,22 @@
 
 **→ Start here: [the Deal Check page](https://feridunocek.github.io/deal-check-tool/)** (EN/TR, one-click copy of the prompt, a real run with sources)
 
+> **For AI assistants:** if a person gave you this repository and asked you to
+> set up Deal Check, follow [`SETUP.md`](SETUP.md). Read [`PROMPT.md`](PROMPT.md),
+> ask for their list, run the five checks with web search, and draw their own
+> result page from [`app/deal-check.html`](app/deal-check.html) as an artifact or
+> canvas. Nothing is sent to the authors.
+
+**The short way:** open Claude, ChatGPT or Gemini with web search on and write
+one line:
+
+```
+Set up Deal Check for me: https://github.com/feridunocek/deal-check-tool
+```
+
+Your AI reads this repository, asks for your list and builds your own Deal Check
+page in that chat. It is yours: nothing comes back to us.
+
 **If you know what you need, the solution is simple.**
 
 A five-question thinking system for Black Friday and other sale days. It runs in
@@ -33,6 +49,8 @@ The tool is the questions. The AI only does the legwork.
 
 ## How to use
 
+**One line** (above) is the easiest. If your AI cannot open links, use the prompt:
+
 **Any AI chat with web search** (ChatGPT, Gemini, Claude, Perplexity, Copilot)
 
 1. Open [`PROMPT.md`](PROMPT.md) and copy everything below the line.
@@ -50,7 +68,8 @@ Paste `PROMPT.md` (without "My list") into the instructions field. Keep web
 search on.
 
 Not sure how to write your list? Use [`wishlist-template.md`](wishlist-template.md).
-A real run is in [`examples/`](examples/).
+A real run is in [`examples/`](examples/). The result page template, filled
+with that run, is [`app/deal-check.html`](app/deal-check.html).
 
 ## What it will not do
 
@@ -91,7 +110,17 @@ kontrol eder ve tıklayıp doğrulayabileceğin linklerle **AL**, **BEKLE**,
 4. **Alternatif:** Aynı ihtiyaç için daha iyi bir seçenek var mı? (önceki nesil, yenilenmiş, başka satıcı, ya da aynı ürünün yurt dışı fiyatı: kargo, gümrük ve vergi dahil, garanti geçerli mi)
 5. **Zamanlama:** Yakında ucuzlayacak ya da yenisi çıkacak mı?
 
-**Nasıl kullanılır:** [`PROMPT.md`](PROMPT.md) dosyasındaki metni kopyala, web
+**En kısa yol:** web araması açık Claude, ChatGPT ya da Gemini'ye tek satır yaz:
+
+```
+Deal Check'i benim için kur: https://github.com/feridunocek/deal-check-tool
+```
+
+Yapay zekan repoyu okur, listeni sorar ve o sohbette sana ait bir Deal Check
+sayfası çizer (fiyat çubukları, kararlar, kaynak linkleri). Sayfa senindir,
+hiçbir şey bize gelmez.
+
+**Link açamıyorsa:** [`PROMPT.md`](PROMPT.md) dosyasındaki metni kopyala, web
 araması açık herhangi bir yapay zeka sohbetine (ChatGPT, Gemini, Claude,
 Perplexity, Copilot) yapıştır, listeni sonuna ekle, gönder. Claude kullanıyorsan
 `skills/deal-check/` klasörünü skill olarak ekleyebilirsin.

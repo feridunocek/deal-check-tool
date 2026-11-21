@@ -1,0 +1,105 @@
+{
+  "lang": "tr",
+  "locale": "tr-TR",
+  "title": "Benim Deal Check'im",
+  "run_date": "2026-11-21",
+  "decide_by": "2026-11-28",
+  "budget": null,
+  "items": [
+    {
+      "name": "Sony WH-1000XM5",
+      "country": "Türkiye",
+      "reason": "Eskisi bozuldu",
+      "picked": "",
+      "verdict": "WAIT",
+      "verdict_reason": "İhtiyaç gerçek ama bugünkü fiyat iki gün öncekinden %11 yüksek. 28 Kasım'a kadar bekle.",
+      "hint": "her durumda 28 Kasım'a kadar al",
+      "currency": "TRY",
+      "prices": [
+        {"kind": "today", "label": "Bugün, Hepsiburada", "value": 14389, "prefix": "", "date": "2026-11-21", "url": "https://www.akakce.com/bluetooth-kulaklik/en-ucuz-sony-wh-1000xm5-kulak-ustu-fiyati,1868730591.html"},
+        {"kind": "low", "label": "30 günün en düşüğü", "value": 12950.10, "prefix": "", "date": "2026-11-19", "url": "https://www.akakce.com/bluetooth-kulaklik/en-ucuz-sony-wh-1000xm5-kulak-ustu-fiyati,1868730591.html"},
+        {"kind": "abroad", "label": "Almanya, bagajda", "value": 11024, "prefix": "≈", "date": "2026-11-21", "url": "https://geizhals.de/sony-wh-1000xm5-schwarz-a2733874.html"},
+        {"kind": "abroad", "label": "Almanya, kargoyla", "value": null, "prefix": "", "date": "", "url": ""}
+      ],
+      "checks": {
+        "need": "Gerçek. Eskisi bozuldu, yani gelecek ay tam fiyata da alırdın.",
+        "price": "Hepsiburada 14.389 TL, n11 14.398 TL, Amazon TR 15.350 TL. İki gün önce 12.950 TL'ydi. Türkiye'de 1 Ağustos 2026'dan beri indirim, satıcının son 10 gündeki en düşük fiyatına göre ölçülüyor.",
+        "same": "Normal kodlar WH-1000XM5B / XM5S. \"XM5 ile aynı işlemci\" diye satılan Sony ULT Wear başka ve daha ucuz bir model.",
+        "alt": "Yeni XM6, 7 Kasım'da 14.220 TL idi, bugün 17.732 TL. Almanya'da 199 €; bir yolcu 430 € muafiyetle getirirse yaklaşık 11.024 TL. Kargoyla daha ucuz olduğu gösterilemedi.",
+        "timing": "XM6 çıktı, XM5 artık önceki model. Mesafeli satışta 14 gün iade hakkı var."
+      },
+      "sources": [
+        {"label": "Akakçe, XM5 fiyatları ve 30 günlük geçmiş", "url": "https://www.akakce.com/bluetooth-kulaklik/en-ucuz-sony-wh-1000xm5-kulak-ustu-fiyati,1868730591.html"},
+        {"label": "Akakçe, XM6", "url": "https://www.akakce.com/bluetooth-kulaklik/en-ucuz-sony-wh-1000xm6-kulak-ustu-fiyati,922817950.html"},
+        {"label": "Geizhals, Almanya'da XM5", "url": "https://geizhals.de/sony-wh-1000xm5-schwarz-a2733874.html"},
+        {"label": "TCMB kuru, 20.11.2026", "url": "https://www.tcmb.gov.tr/kurlar/today.xml"},
+        {"label": "Ticaret Bakanlığı, yolcu muafiyeti", "url": "https://ticaret.gov.tr/gumruk-islemleri/sikca-sorulan-sorular/bireysel/yolcu-muafiyetleri"},
+        {"label": "NTV, 10 günlük indirim kuralı", "url": "https://www.ntv.com.tr/ntvpara/ticaret-bakanligi-acikladi-1-agustosta-zorunlu-olacak-1735036"}
+      ]
+    },
+    {
+      "name": "Apple AirPods Pro 3",
+      "country": "Almanya",
+      "reason": "Olsa iyi olur",
+      "picked": "",
+      "verdict": "SKIP",
+      "verdict_reason": "İhtiyaç değil. 199,99 € de fırsat değil, son altı ayın medyan fiyatı.",
+      "hint": "fiyat alarmı: yaklaşık 180 €",
+      "currency": "EUR",
+      "prices": [
+        {"kind": "today", "label": "Bugün, Amazon.de", "value": 199.99, "prefix": "", "date": "2026-11-21", "url": "https://geizhals.de/3587143"},
+        {"kind": "low", "label": "30 günün en düşüğü", "value": 187.19, "prefix": "", "date": "2026-11-20", "url": "https://geizhals.de/?phist=3587143"},
+        {"kind": "other", "label": "6 aylık medyan", "value": 199.00, "prefix": "", "date": "2026-11-20", "url": "https://geizhals.de/?phist=3587143"},
+        {"kind": "abroad", "label": "ABD, ithalat KDV'si dahil", "value": 194.16, "prefix": "≥", "date": "2026-11-19", "url": "https://macrumors.com/2026/11/19/airpods-black-friday-deals"}
+      ],
+      "checks": {
+        "need": "\"Olsa iyi olur\" dedin. Gelecek ay tam fiyata büyük ihtimalle almazdın.",
+        "price": "Amazon.de 199,99 €; Cyberport ve MediaMarkt 209 €. 30 günün en düşüğü 187,19 €, 90 günün 180 €. Geizhals bugünkü fiyatı \"normal\" diye işaretliyor.",
+        "same": "\"AirPods Pro\" bugün Pro 3 demek (MFHP4ZM/A). Benzer fiyata eski bir Pro 2 olmadığından emin ol.",
+        "alt": "Almamak. ABD'de 179 $, kargo ve ücretler hariç en az 194,16 €'ya geliyor; evdeki fiyatı açıkça geçmiyor.",
+        "timing": "Yeni Pro duyurulmadı; söylentiler 2027 diyor. Amazon.de yılbaşı iadeleri 31 Ocak 2027'ye kadar."
+      },
+      "sources": [
+        {"label": "Geizhals, güncel teklifler", "url": "https://geizhals.de/3587143"},
+        {"label": "Geizhals, fiyat geçmişi", "url": "https://geizhals.de/?phist=3587143"},
+        {"label": "MacRumors, ABD fiyatı", "url": "https://macrumors.com/2026/11/19/airpods-black-friday-deals"},
+        {"label": "§ 11 PAngV, 30 gün kuralı", "url": "https://www.gesetze-im-internet.de/pangv_2022/__11.html"}
+      ]
+    },
+    {
+      "name": "Robot süpürge, 300 € altı",
+      "country": "Hollanda",
+      "reason": "Hangisi olsun, emin değilim",
+      "picked": "Örnek model: Dreame D20 Pro Plus (süpürme, hafif paspas, kendini boşaltan istasyon).",
+      "verdict": "WAIT",
+      "verdict_reason": "199 € eylülden beri her günkü fiyatı ve olmazsa olmaz özelliklerini henüz seçmedin.",
+      "hint": "önce özellikleri seç",
+      "currency": "EUR",
+      "prices": [
+        {"kind": "today", "label": "Bugün, Coolblue ve bol", "value": 199, "prefix": "", "date": "2026-11-21", "url": "https://www.coolblue.nl/product/968563/dreame-d20-pro-plus.html"},
+        {"kind": "low", "label": "30 günün en düşüğü", "value": 179, "prefix": "", "date": "2026-10-29", "url": "https://tweakers.net/pricewatch/2253514/dreame-d20-pro-plus-zwart.html"},
+        {"kind": "alt", "label": "Yenilenmiş, Coolblue", "value": 190, "prefix": "", "date": "2026-11-21", "url": "https://www.coolblue.nl/product/968563/dreame-d20-pro-plus.html"},
+        {"kind": "abroad", "label": "Yurt dışı", "value": null, "prefix": "", "date": "", "url": ""}
+      ],
+      "checks": {
+        "need": "Belirsiz. Önce neye ihtiyacın olduğuna karar ver: paspas, kendini boşaltan istasyon, evcil hayvan tüyü.",
+        "price": "Coolblue ve bol'da 199 €. 30 ve 90 günün en düşüğü 179 € (29 Ekim). Eylülden beri uzun süreler 199 €.",
+        "same": "\"D20 Pro Plus\" yazdığına bak; istasyonsuz \"D20 Pro\" ya da \"D20\" daha ucuz ve başka ürün.",
+        "alt": "Coolblue yenilenmiş 190 €'dan. Paspas yıkayan istasyon istersen Mova E50 Ultra 299 €, fiyat geçmişi kontrol edilmedi.",
+        "timing": "Coolblue'da 30 gün ücretsiz iade. Yeni model zamanlaması kontrol edilmedi."
+      },
+      "sources": [
+        {"label": "Coolblue, Dreame D20 Pro Plus", "url": "https://www.coolblue.nl/product/968563/dreame-d20-pro-plus.html"},
+        {"label": "Tweakers Pricewatch, fiyat geçmişi", "url": "https://tweakers.net/pricewatch/2253514/dreame-d20-pro-plus-zwart.html"},
+        {"label": "ACM, adil indirim kuralı", "url": "https://www.acm.nl/nl/publicaties/acm-wil-eerlijke-kortingen-om-consumenten-te-beschermen-tegen-misleiding"}
+      ]
+    }
+  ],
+  "total": "Hiçbir ürün AL çıkmadı, toplam 0. Kulaklığı planladığın gibi 28 Kasım'a kadar alırsan bugünkü fiyatla yaklaşık 14.400 TL.",
+  "before_you_pay": [
+    "Türkiye: satıcının Sony Türkiye distribütör garantisi verdiğine ve kodun WH-1000XM5B/S olduğuna bak.",
+    "Ödeme günü fiyat geçmişine kendin bak: Akakçe (TR), Geizhals (DE), Tweakers (NL).",
+    "İade süresini ürünün kendi sayfasında kontrol et, özellikle pazaryeri satıcılarında."
+  ],
+  "ui": {}
+}

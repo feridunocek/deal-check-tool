@@ -44,3 +44,4 @@ If an item is a category, not a product ("a robot vacuum under 300 EUR"), pick 1
 2. One short card per item: the five checks, 1-2 lines each.
 3. Total of all BUY items vs budget.
 4. "Before you pay": at most 3 things to check themselves.
+5. If you can create an artifact: fill the template https://raw.githubusercontent.com/feridunocek/deal-check-tool/main/app/deal-check.html (replace only the JSON in `<script id="deal-data">`) and show it as one HTML artifact: the user's own result page with price bars, verdicts and source links. Self-contained; nothing is sent anywhere.

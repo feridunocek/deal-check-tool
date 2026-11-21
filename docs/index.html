@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta property="og:title" content="Deal Check">
-<meta property="og:description" content="Black Friday için beş soruluk düşünme sistemi. Kendi yapay zekanda çalışır; uygulama, üyelik, sunucu yok. / A five-question shopping check that runs in your own AI.">
+<meta property="og:description" content="Black Friday için beş soruluk düşünme sistemi. Kendi yapay zekana tek satır yaz, sana ait bir fiyat karşılaştırma sayfası kurulsun; uygulama, üyelik, sunucu yok. / A five-question shopping check that runs in your own AI.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://feridunocek.github.io/deal-check-tool/">
 <meta name="twitter:card" content="summary">
@@ -81,6 +81,29 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .btn svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .facts{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:26px;font:500 13px/1.4 var(--mono);color:var(--muted)}
 .facts span::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--buy);margin-right:8px;vertical-align:1px}
+
+/* setup line */
+.setup{margin-top:28px;max-width:560px}
+.setup .lbl{font:600 11px/1.3 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.line{display:flex;align-items:stretch;gap:0;margin-top:8px;background:var(--surface);border:1.5px solid var(--ink);border-radius:14px;overflow:hidden}
+.line code{flex:1;min-width:0;font:500 14px/1.45 var(--mono);padding:14px 16px;word-break:break-word}
+.line .btn{border-radius:0;padding:14px 18px;flex:none}
+@media (max-width:520px){.line{flex-direction:column}.line .btn{justify-content:center}}
+.setup .hint{margin-top:10px;font-size:14px;color:var(--muted)}
+.setup .hint a{color:var(--ink);font-weight:600;text-underline-offset:3px}
+
+/* your page preview */
+.yours{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:clamp(24px,4vw,56px);align-items:start}
+@media (max-width:900px){.yours{grid-template-columns:minmax(0,1fr)}}
+.yours .steps{margin-top:6px}
+.chatwin{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:0 30px 60px -40px rgba(18,24,38,.6);min-width:0}
+.chatwin .chrome{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 14px;border-bottom:1px solid var(--line);font:500 12px/1.3 var(--mono);color:var(--muted)}
+.chatwin .dots{display:flex;gap:6px}.chatwin .dots i{width:9px;height:9px;border-radius:50%;background:var(--line)}
+.chatwin .ask{padding:14px 16px;border-bottom:1px dashed var(--line);display:flex;justify-content:flex-end}
+.chatwin .ask p{background:var(--paper);border:1px solid var(--line);border-radius:14px 14px 4px 14px;padding:9px 13px;font:500 13px/1.45 var(--mono);max-width:90%;word-break:break-word}
+.chatwin iframe{display:block;width:100%;height:min(78vh,760px);border:0;background:var(--paper)}
+.chatwin .under{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 16px;padding:10px 14px;border-top:1px solid var(--line);font:500 12px/1.4 var(--mono);color:var(--muted)}
+.chatwin .under a{color:var(--ink);text-underline-offset:3px}
 
 /* the shelf tag */
 .tagstage{position:relative;display:flex;justify-content:center;padding-top:28px}
@@ -244,16 +267,18 @@ footer a{color:var(--ink);text-underline-offset:3px}
         <span class="tr">Deal Check beş soruluk bir düşünme sistemi. Almak istediklerinin listesini <b>zaten kullandığın yapay zekaya</b> verirsin; her ürünü beş soruyla kontrol eder ve tıklayıp doğrulayabileceğin linklerle <b>AL, BEKLE, ATLA</b> ya da <b>ŞÜPHELİ</b> der.</span>
         <span class="en">Deal Check is a five-question thinking system. You give your wishlist to <b>the AI you already use</b>; it checks every item against five questions and says <b>BUY, WAIT, SKIP</b> or <b>SUSPICIOUS</b>, with links you can click to check it yourself.</span>
       </p>
-      <div class="cta-row">
-        <button class="btn btn-primary" type="button" data-copy id="copy-hero">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
-          <span class="tr">Promptu kopyala</span><span class="en">Copy the prompt</span>
-        </button>
-        <a class="btn btn-ghost" href="#run">
-          <span class="tr">Gerçek bir denemeyi gör</span><span class="en">See a real run</span>
-        </a>
+      <div class="setup">
+        <p class="lbl"><span class="tr">Kendi yapay zekana tek satır yaz</span><span class="en">Write one line to your own AI</span></p>
+        <div class="line">
+          <code><span class="tr">Deal Check'i benim için kur: https://github.com/feridunocek/deal-check-tool</span><span class="en">Set up Deal Check for me: https://github.com/feridunocek/deal-check-tool</span></code>
+          <button class="btn btn-primary" type="button" data-copy="line" id="copy-hero">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+            <span class="tr">Kopyala</span><span class="en">Copy</span>
+          </button>
+        </div>
+        <p class="status" id="status-hero" aria-live="polite" style="margin-top:10px;color:var(--muted)"></p>
+        <p class="hint"><span class="tr">Claude, ChatGPT ya da Gemini'de, web araması açıkken. Yapay zekan listeni sorar, beş kontrolü yapar ve sana ait bir sayfa çizer. <a href="#yours">Sayfan nasıl görünür →</a></span><span class="en">In Claude, ChatGPT or Gemini, with web search on. Your AI asks for your list, runs the five checks and draws a page that is yours. <a href="#yours">See what your page looks like →</a></span></p>
       </div>
-      <p class="status" id="status-hero" aria-live="polite" style="margin-top:12px;color:var(--muted)"></p>
       <div class="facts">
         <span class="tr">Uygulama yok</span><span class="en">No app</span>
         <span class="tr">Üyelik yok</span><span class="en">No account</span>
@@ -397,21 +422,49 @@ footer a{color:var(--ink);text-underline-offset:3px}
   </div>
 </section>
 
+<!-- YOUR PAGE -->
+<section class="block" id="yours">
+  <div class="wrap">
+    <div class="head">
+      <p class="eyebrow"><span class="tr">Senin sayfan</span><span class="en">Your own page</span></p>
+      <h2><span class="tr">Fiyat karşılaştırması, kendi yapay zekanda.</span><span class="en">The price check, in your own AI.</span></h2>
+      <p><span class="tr">Tek satırı yazdığında yapay zekan bu repoyu okur, sonucu sohbette yazar ve aynı sohbette sana ait bir sayfa açar: Claude'da artifact, ChatGPT ve Gemini'de canvas. Aşağıdaki, 21 Kasım denemesiyle doldurulmuş aynı sayfa.</span><span class="en">When you write the one line, your AI reads this repo, writes the answer in the chat and opens a page of your own in that chat: an artifact in Claude, a canvas in ChatGPT and Gemini. Below is that same page, filled with the 21 November run.</span></p>
+    </div>
+    <div class="yours">
+      <div>
+        <ol class="steps">
+          <li><div><b><span class="tr">Tek satırı yaz</span><span class="en">Write the one line</span></b><span><span class="tr">Uzun bir metin kopyalamana gerek yok. Web araması açık olsun.</span><span class="en">No long text to copy. Keep web search on.</span></span></div></li>
+          <li><div><b><span class="tr">Listeni ver</span><span class="en">Give your list</span></b><span><span class="tr">Yapay zekan tek mesajda sorar: ne almak istiyorsun, neden, hangi ülkede, ne zamana kadar karar vereceksin.</span><span class="en">Your AI asks once: what you want, why, which country, and by when you must decide.</span></span></div></li>
+          <li><div><b><span class="tr">Sayfan açılır</span><span class="en">Your page opens</span></b><span><span class="tr">Her ürün için fiyat çubukları (bugün, 30 günün en düşüğü, yurt dışından getirince), karar damgası, beş kontrol ve tıklanabilir kaynaklar.</span><span class="en">For each item: price bars (today, 30-day low, landed from abroad), a verdict stamp, the five checks and clickable sources.</span></span></div></li>
+          <li><div><b><span class="tr">Sohbette güncelle</span><span class="en">Update it in the chat</span></b><span><span class="tr">"Şunu da ekle" ya da "fiyatlara yarın tekrar bak" de; sayfa yeniden çizilir.</span><span class="en">Say "add this too" or "check the prices again tomorrow" and the page is redrawn.</span></span></div></li>
+        </ol>
+        <p class="caveat"><span class="tr">Sayfa senin sohbetinde kalır. İçinde takip kodu, dış bağlantı ya da bize giden bir şey yok. Yapay zekan sayfa açamıyorsa sonuç yine sohbette yazılı gelir.</span><span class="en">The page stays in your chat. It has no tracking, no outside connections and nothing that reaches us. If your AI cannot open a page, the answer still arrives as text in the chat.</span></p>
+      </div>
+      <div class="chatwin">
+        <div class="chrome"><span class="dots" aria-hidden="true"><i></i><i></i><i></i></span><span><span class="tr">Senin yapay zekan · artifact / canvas</span><span class="en">Your AI · artifact / canvas</span></span></div>
+        <div class="ask"><p><span class="tr">Deal Check'i benim için kur: https://github.com/feridunocek/deal-check-tool</span><span class="en">Set up Deal Check for me: https://github.com/feridunocek/deal-check-tool</span></p></div>
+        <iframe id="preview" src="app/deal-check.tr.html" title="Deal Check result page preview" loading="lazy"></iframe>
+        <div class="under"><span><span class="tr">Örnek veri: 21 Kasım 2026 denemesi</span><span class="en">Sample data: the 21 November 2026 run</span></span><a id="preview-full" href="app/deal-check.tr.html" target="_blank" rel="noopener"><span class="tr">Tam ekran aç ↗</span><span class="en">Open full screen ↗</span></a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- HOW TO USE -->
 <section class="block" id="use">
   <div class="wrap">
     <div class="head">
       <p class="eyebrow"><span class="tr">Kullanım · 2 dakika</span><span class="en">How to use · 2 minutes</span></p>
-      <h2><span class="tr">Kopyala, yapıştır, listeni ekle.</span><span class="en">Copy, paste, add your list.</span></h2>
-      <p><span class="tr">Web araması açık her yapay zeka sohbetinde çalışır: ChatGPT, Gemini, Claude, Perplexity, Copilot. Türkçe yazarsan Türkçe cevap verir.</span><span class="en">Works in any AI chat with web search on: ChatGPT, Gemini, Claude, Perplexity, Copilot. It answers in the language you write in.</span></p>
+      <h2><span class="tr">Tek satır yaz, listeni ver.</span><span class="en">Write one line, give your list.</span></h2>
+      <p><span class="tr">Web araması açık her yapay zeka sohbetinde çalışır. Yapay zekan linki açamazsa aşağıdaki uzun promptu yapıştır; sonuç aynı. Türkçe yazarsan Türkçe cevap verir.</span><span class="en">Works in any AI chat with web search on. If your AI cannot open the link, paste the long prompt below instead; the result is the same. It answers in the language you write in.</span></p>
     </div>
 
     <div class="how">
       <div class="copycard">
-        <p class="eyebrow" style="color:inherit;opacity:.7">PROMPT.md</p>
-        <h3><span class="tr">Tüm sistem tek bir metin.</span><span class="en">The whole system is one text.</span></h3>
+        <p class="eyebrow" style="color:inherit;opacity:.7"><span class="tr">Yedek yol · PROMPT.md</span><span class="en">Fallback · PROMPT.md</span></p>
+        <h3><span class="tr">Link açılmazsa: tüm sistem tek bir metin.</span><span class="en">If the link does not open: the whole system is one text.</span></h3>
         <p><span class="tr">Beş soru, karar kuralları ve "kaynağı olmayan fiyatı yazma" kuralı. Kopyala, yeni bir sohbete yapıştır, en alta listeni yaz.</span><span class="en">Five questions, the verdict rules and the "no source, no price" rule. Copy it, paste it into a new chat, write your list at the bottom.</span></p>
-        <button class="btn" type="button" data-copy id="copy-main">
+        <button class="btn" type="button" data-copy="prompt" id="copy-main">
           <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
           <span class="lbl"><span class="tr">Promptu panoya kopyala</span><span class="en">Copy prompt to clipboard</span></span>
         </button>
@@ -500,6 +553,12 @@ Give each item exactly one verdict with one sentence of reason:
 2. **One short card per item** with the five checks, 1-2 lines each.
 3. **Total:** what buying every BUY item would cost, compared with my budget.
 4. **Before you pay:** at most 3 things I should check myself.
+5. **My own page (if you can show HTML: Claude artifact, ChatGPT or Gemini
+   canvas):** fetch
+   https://raw.githubusercontent.com/feridunocek/deal-check-tool/main/app/deal-check.html,
+   replace only the JSON in `&lt;script id="deal-data"&gt;` with these results and
+   show the whole file as one artifact / canvas. Nothing in it loads from or
+   sends to another server. If you cannot fetch it or show HTML, skip this.
 
 ## My list
 
@@ -523,8 +582,8 @@ Example:
         <div class="panel" role="tabpanel" id="p-gpt" aria-labelledby="t-gpt">
           <ol class="steps">
             <li><div><b><span class="tr">Yeni bir sohbet aç</span><span class="en">Open a new chat</span></b><span><span class="tr">Web aramasının açık olduğundan emin ol. Kapalıysa prompt bunu söyleyip durur, tahminle fiyat yazmaz.</span><span class="en">Make sure web search is on. If it is off, the prompt says so and stops instead of guessing prices.</span></span></div></li>
-            <li><div><b><span class="tr">Promptu yapıştır</span><span class="en">Paste the prompt</span></b><span><span class="tr">Soldaki düğmeyle kopyaladığın metni olduğu gibi yapıştır.</span><span class="en">Paste the text you copied with the button, as it is.</span></span></div></li>
-            <li><div><b><span class="tr">Listeni en alta yaz, gönder</span><span class="en">Add your list at the bottom, send</span></b><span><span class="tr">Her satıra bir ürün: ad ya da link, ülke, neden istediğin.</span><span class="en">One item per line: name or link, country, why you want it.</span></span></div></li>
+            <li><div><b><span class="tr">Tek satırı yaz</span><span class="en">Write the one line</span></b><span><span class="tr">Linki açamazsa soldaki promptu yapıştır.</span><span class="en">If it cannot open the link, paste the prompt on the left.</span></span></div></li>
+            <li><div><b><span class="tr">Listeni ver</span><span class="en">Give your list</span></b><span><span class="tr">Sonuç sohbette gelir. Sayfa kendiliğinden açılmazsa "sonucu canvas'ta göster" de.</span><span class="en">The answer arrives in the chat. If the page does not open by itself, say "show the result in canvas".</span></span></div></li>
           </ol>
           <p class="extra"><span class="tr"><b>Kalıcı yapmak için:</b> bir Custom GPT oluştur, promptu ("My list" kısmı hariç) talimat alanına yapıştır, web aramasını açık bırak.</span><span class="en"><b>To keep it:</b> create a Custom GPT, paste the prompt (without "My list") into the instructions, keep web search on.</span></p>
         </div>
@@ -532,8 +591,8 @@ Example:
         <div class="panel" role="tabpanel" id="p-gem" aria-labelledby="t-gem" hidden>
           <ol class="steps">
             <li><div><b><span class="tr">gemini.google.com'da yeni sohbet aç</span><span class="en">Open a new chat at gemini.google.com</span></b><span><span class="tr">Gemini web'de arama yapabilir; fiyatlar için bu şart.</span><span class="en">Gemini can search the web; prices need that.</span></span></div></li>
-            <li><div><b><span class="tr">Promptu yapıştır</span><span class="en">Paste the prompt</span></b><span><span class="tr">Kopyaladığın metni olduğu gibi yapıştır.</span><span class="en">Paste the copied text as it is.</span></span></div></li>
-            <li><div><b><span class="tr">Listeni en alta yaz, gönder</span><span class="en">Add your list at the bottom, send</span></b><span><span class="tr">Ülke ve karar tarihi yoksa bir kez sorar, sonra işe koyulur.</span><span class="en">If country or deadline is missing it asks once, then gets to work.</span></span></div></li>
+            <li><div><b><span class="tr">Tek satırı yaz</span><span class="en">Write the one line</span></b><span><span class="tr">Linki açamazsa soldaki promptu yapıştır.</span><span class="en">If it cannot open the link, paste the prompt on the left.</span></span></div></li>
+            <li><div><b><span class="tr">Listeni ver</span><span class="en">Give your list</span></b><span><span class="tr">Ülke ve karar tarihi yoksa bir kez sorar. Sayfa için araçlardan Canvas'ı seç ya da "sonucu Canvas'ta göster" de.</span><span class="en">If country or deadline is missing it asks once. For the page, pick Canvas in the tools or say "show the result in Canvas".</span></span></div></li>
           </ol>
           <p class="extra"><span class="tr"><b>Kalıcı yapmak için:</b> bir Gem oluştur ve promptu ("My list" kısmı hariç) talimatlarına yapıştır.</span><span class="en"><b>To keep it:</b> create a Gem and paste the prompt (without "My list") into its instructions.</span></p>
         </div>
@@ -541,7 +600,7 @@ Example:
         <div class="panel" role="tabpanel" id="p-cl" aria-labelledby="t-cl" hidden>
           <ol class="steps">
             <li><div><b><span class="tr">claude.ai'da web aramasını aç</span><span class="en">Turn on web search at claude.ai</span></b><span><span class="tr">Sonra yeni bir sohbet başlat.</span><span class="en">Then start a new chat.</span></span></div></li>
-            <li><div><b><span class="tr">Promptu yapıştır, listeni ekle</span><span class="en">Paste the prompt, add your list</span></b><span><span class="tr">Ya da bir Project açıp promptu talimatlara koy.</span><span class="en">Or open a Project and put the prompt in its instructions.</span></span></div></li>
+            <li><div><b><span class="tr">Tek satırı yaz, listeni ver</span><span class="en">Write the one line, give your list</span></b><span><span class="tr">Sonuç sohbette gelir, sayfan artifact olarak yanında açılır. Kalıcı istersen bir Project açıp promptu talimatlara koy.</span><span class="en">The answer arrives in the chat and your page opens beside it as an artifact. To keep it, open a Project and put the prompt in its instructions.</span></span></div></li>
             <li><div><b><span class="tr">Ya da skill olarak kur</span><span class="en">Or install it as a skill</span></b><span><span class="tr">Repodaki <code>skills/deal-check/</code> klasörünü zip'le, ayarlarda Skills altına yükle. Sonra sadece "listemi kontrol et" de.</span><span class="en">Zip the <code>skills/deal-check/</code> folder from the repo and upload it under Skills in settings. Then just say "check my wishlist".</span></span></div></li>
           </ol>
           <p class="extra"><span class="tr"><b>Claude Code:</b> <code>skills/deal-check/</code> klasörünü <code>~/.claude/skills/</code> içine kopyala.</span><span class="en"><b>Claude Code:</b> copy <code>skills/deal-check/</code> into <code>~/.claude/skills/</code>.</span></p>
@@ -588,8 +647,8 @@ Example:
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg>
           <span class="tr">Repoyu GitHub'da aç</span><span class="en">Open the repo on GitHub</span>
         </a>
-        <button class="btn btn-ghost" type="button" data-copy id="copy-end">
-          <span class="tr">Promptu kopyala</span><span class="en">Copy the prompt</span>
+        <button class="btn btn-ghost" type="button" data-copy="line" id="copy-end">
+          <span class="tr">Kurulum satırını kopyala</span><span class="en">Copy the setup line</span>
         </button>
       </div>
       <p class="status" id="status-end" aria-live="polite" style="margin-top:12px;font-size:13px"></p>
@@ -617,6 +676,10 @@ Example:
     document.querySelectorAll('.lang button').forEach(function(b){ b.setAttribute('aria-pressed', String(b.dataset.set === l)); });
     document.querySelectorAll('.status').forEach(function(s){ s.textContent = ''; });
     try { localStorage.setItem('dc-lang', l); } catch(e){}
+    var src = l === 'tr' ? 'app/deal-check.tr.html' : 'app/deal-check.html';
+    var fr = document.getElementById('preview'), full = document.getElementById('preview-full');
+    if (fr && fr.getAttribute('src') !== src) fr.setAttribute('src', src);
+    if (full) full.setAttribute('href', src);
   }
   var saved = null;
   try { saved = localStorage.getItem('dc-lang'); } catch(e){}
@@ -626,8 +689,11 @@ Example:
 
   // copy
   var ta = document.getElementById('prompt');
+  var LINE = {tr:"Deal Check'i benim için kur: https://github.com/feridunocek/deal-check-tool", en:"Set up Deal Check for me: https://github.com/feridunocek/deal-check-tool"};
   var msgs = {
     ok: {tr:'Kopyalandı. Yeni bir sohbete yapıştır, listeni en alta yaz.', en:'Copied. Paste it into a new chat and add your list at the bottom.'},
+    okLine: {tr:'Kopyalandı. Claude, ChatGPT ya da Gemini\'de yeni bir sohbete yapıştır ve gönder.', en:'Copied. Paste it into a new Claude, ChatGPT or Gemini chat and send.'},
+    failLine: {tr:'Otomatik kopyalama engellendi. Satırı seçip kopyala.', en:'Automatic copy was blocked. Select the line and copy it.'},
     fail: {tr:'Otomatik kopyalama engellendi. Metni seçtim: Cmd/Ctrl + C ile kopyala.', en:'Automatic copy was blocked. The text is selected: press Cmd/Ctrl + C.'}
   };
   function statusFor(btn){
@@ -640,17 +706,24 @@ Example:
     ta.focus(); ta.select();
     statusFor(btn).textContent = msgs.fail[app.getAttribute('data-l')];
   }
+  function failLine(btn){
+    statusFor(btn).textContent = msgs.failLine[app.getAttribute('data-l')];
+    var code = btn.parentNode.querySelector('code');
+    if (code) { var r = document.createRange(); r.selectNodeContents(code.querySelector('.' + app.getAttribute('data-l')) || code); var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r); }
+  }
   document.querySelectorAll('[data-copy]').forEach(function(btn){
     btn.addEventListener('click', function(){
       var l = app.getAttribute('data-l');
+      var isLine = btn.getAttribute('data-copy') === 'line';
+      var text = isLine ? LINE[l] : ta.value;
       function ok(){
-        statusFor(btn).textContent = msgs.ok[l];
+        statusFor(btn).textContent = (isLine ? msgs.okLine : msgs.ok)[l];
         btn.classList.add('done');
         setTimeout(function(){ btn.classList.remove('done'); }, 2200);
       }
       // 1) synchronous copy inside the click (works in frames without clipboard-write permission)
       var tmp = document.createElement('textarea');
-      tmp.value = ta.value; tmp.setAttribute('readonly', '');
+      tmp.value = text; tmp.setAttribute('readonly', '');
       tmp.style.cssText = 'position:fixed;top:0;left:-9999px;opacity:0';
       document.body.appendChild(tmp);
       tmp.select(); tmp.setSelectionRange(0, tmp.value.length);
@@ -661,8 +734,8 @@ Example:
       if (done) { ok(); return; }
       // 2) async clipboard API
       try {
-        navigator.clipboard.writeText(ta.value).then(ok, function(){ fallback(btn); });
-      } catch(e){ fallback(btn); }
+        navigator.clipboard.writeText(text).then(ok, function(){ isLine ? failLine(btn) : fallback(btn); });
+      } catch(e){ isLine ? failLine(btn) : fallback(btn); }
     });
   });
 

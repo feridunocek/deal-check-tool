@@ -1,0 +1,558 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My Deal Check</title>
+<!--
+  DEAL CHECK RESULT PAGE (template)
+  ---------------------------------
+  For the AI assistant: you only change the JSON inside <script id="deal-data">.
+  Do not touch the CSS or the renderer below it. Show the whole file as one
+  artifact / canvas. It is self-contained: no external fonts, scripts or
+  requests. Nothing is stored or sent anywhere.
+
+  Fields
+  - lang: "en" or "tr" sets the built-in labels. Any other language: keep "en"
+    and translate the labels in "ui" (same keys as UI.en in the script).
+  - locale: number format, e.g. "en-GB", "tr-TR", "de-DE", "nl-NL".
+  - run_date, decide_by: "YYYY-MM-DD". budget: text or null.
+  - items[]: one per product.
+      name, country, reason (the user's own words), picked (optional, why this
+      model was chosen for a category), verdict: BUY | WAIT | SKIP | SUSPICIOUS,
+      verdict_reason (one sentence), hint (short, under the stamp),
+      currency: ISO code (TRY, EUR, USD, GBP...).
+      prices[]: the bars. kind: "today" | "low" | "abroad" | "alt" | "other".
+        value: number or null (null = not found, drawn as an empty bar).
+        prefix: "" | "≈" | "≥". label, date ("YYYY-MM-DD"), url (source link).
+        The first "today" and the first "low" give the % gap badge.
+      checks: need, price, same, alt, timing (1-2 sentences each).
+      sources[]: { label, url } every link you used for this item.
+  - total: one or two sentences. before_you_pay[]: at most 3 strings.
+  - Every price needs a url. No url: set value to null and say "not found".
+-->
+<script type="application/json" id="deal-data">
+{
+  "lang": "tr",
+  "locale": "tr-TR",
+  "title": "Benim Deal Check'im",
+  "run_date": "2026-11-21",
+  "decide_by": "2026-11-28",
+  "budget": null,
+  "items": [
+    {
+      "name": "Sony WH-1000XM5",
+      "country": "Türkiye",
+      "reason": "Eskisi bozuldu",
+      "picked": "",
+      "verdict": "WAIT",
+      "verdict_reason": "İhtiyaç gerçek ama bugünkü fiyat iki gün öncekinden %11 yüksek. 28 Kasım'a kadar bekle.",
+      "hint": "her durumda 28 Kasım'a kadar al",
+      "currency": "TRY",
+      "prices": [
+        {
+          "kind": "today",
+          "label": "Bugün, Hepsiburada",
+          "value": 14389,
+          "prefix": "",
+          "date": "2026-11-21",
+          "url": "https://www.akakce.com/bluetooth-kulaklik/en-ucuz-sony-wh-1000xm5-kulak-ustu-fiyati,1868730591.html"
+        },
+        {
+          "kind": "low",
+          "label": "30 günün en düşüğü",
+          "value": 12950.1,
+          "prefix": "",
+          "date": "2026-11-19",
+          "url": "https://www.akakce.com/bluetooth-kulaklik/en-ucuz-sony-wh-1000xm5-kulak-ustu-fiyati,1868730591.html"
+        },
+        {
+          "kind": "abroad",
+          "label": "Almanya, bagajda",
+          "value": 11024,
+          "prefix": "≈",
+          "date": "2026-11-21",
+          "url": "https://geizhals.de/sony-wh-1000xm5-schwarz-a2733874.html"
+        },
+        {
+          "kind": "abroad",
+          "label": "Almanya, kargoyla",
+          "value": null,
+          "prefix": "",
+          "date": "",
+          "url": ""
+        }
+      ],
+      "checks": {
+        "need": "Gerçek. Eskisi bozuldu, yani gelecek ay tam fiyata da alırdın.",
+        "price": "Hepsiburada 14.389 TL, n11 14.398 TL, Amazon TR 15.350 TL. İki gün önce 12.950 TL'ydi. Türkiye'de 1 Ağustos 2026'dan beri indirim, satıcının son 10 gündeki en düşük fiyatına göre ölçülüyor.",
+        "same": "Normal kodlar WH-1000XM5B / XM5S. \"XM5 ile aynı işlemci\" diye satılan Sony ULT Wear başka ve daha ucuz bir model.",
+        "alt": "Yeni XM6, 7 Kasım'da 14.220 TL idi, bugün 17.732 TL. Almanya'da 199 €; bir yolcu 430 € muafiyetle getirirse yaklaşık 11.024 TL. Kargoyla daha ucuz olduğu gösterilemedi.",
+        "timing": "XM6 çıktı, XM5 artık önceki model. Mesafeli satışta 14 gün iade hakkı var."
+      },
+      "sources": [
+        {
+          "label": "Akakçe, XM5 fiyatları ve 30 günlük geçmiş",
+          "url": "https://www.akakce.com/bluetooth-kulaklik/en-ucuz-sony-wh-1000xm5-kulak-ustu-fiyati,1868730591.html"
+        },
+        {
+          "label": "Akakçe, XM6",
+          "url": "https://www.akakce.com/bluetooth-kulaklik/en-ucuz-sony-wh-1000xm6-kulak-ustu-fiyati,922817950.html"
+        },
+        {
+          "label": "Geizhals, Almanya'da XM5",
+          "url": "https://geizhals.de/sony-wh-1000xm5-schwarz-a2733874.html"
+        },
+        {
+          "label": "TCMB kuru, 20.11.2026",
+          "url": "https://www.tcmb.gov.tr/kurlar/today.xml"
+        },
+        {
+          "label": "Ticaret Bakanlığı, yolcu muafiyeti",
+          "url": "https://ticaret.gov.tr/gumruk-islemleri/sikca-sorulan-sorular/bireysel/yolcu-muafiyetleri"
+        },
+        {
+          "label": "NTV, 10 günlük indirim kuralı",
+          "url": "https://www.ntv.com.tr/ntvpara/ticaret-bakanligi-acikladi-1-agustosta-zorunlu-olacak-1735036"
+        }
+      ]
+    },
+    {
+      "name": "Apple AirPods Pro 3",
+      "country": "Almanya",
+      "reason": "Olsa iyi olur",
+      "picked": "",
+      "verdict": "SKIP",
+      "verdict_reason": "İhtiyaç değil. 199,99 € de fırsat değil, son altı ayın medyan fiyatı.",
+      "hint": "fiyat alarmı: yaklaşık 180 €",
+      "currency": "EUR",
+      "prices": [
+        {
+          "kind": "today",
+          "label": "Bugün, Amazon.de",
+          "value": 199.99,
+          "prefix": "",
+          "date": "2026-11-21",
+          "url": "https://geizhals.de/3587143"
+        },
+        {
+          "kind": "low",
+          "label": "30 günün en düşüğü",
+          "value": 187.19,
+          "prefix": "",
+          "date": "2026-11-20",
+          "url": "https://geizhals.de/?phist=3587143"
+        },
+        {
+          "kind": "other",
+          "label": "6 aylık medyan",
+          "value": 199.0,
+          "prefix": "",
+          "date": "2026-11-20",
+          "url": "https://geizhals.de/?phist=3587143"
+        },
+        {
+          "kind": "abroad",
+          "label": "ABD, ithalat KDV'si dahil",
+          "value": 194.16,
+          "prefix": "≥",
+          "date": "2026-11-19",
+          "url": "https://macrumors.com/2026/11/19/airpods-black-friday-deals"
+        }
+      ],
+      "checks": {
+        "need": "\"Olsa iyi olur\" dedin. Gelecek ay tam fiyata büyük ihtimalle almazdın.",
+        "price": "Amazon.de 199,99 €; Cyberport ve MediaMarkt 209 €. 30 günün en düşüğü 187,19 €, 90 günün 180 €. Geizhals bugünkü fiyatı \"normal\" diye işaretliyor.",
+        "same": "\"AirPods Pro\" bugün Pro 3 demek (MFHP4ZM/A). Benzer fiyata eski bir Pro 2 olmadığından emin ol.",
+        "alt": "Almamak. ABD'de 179 $, kargo ve ücretler hariç en az 194,16 €'ya geliyor; evdeki fiyatı açıkça geçmiyor.",
+        "timing": "Yeni Pro duyurulmadı; söylentiler 2027 diyor. Amazon.de yılbaşı iadeleri 31 Ocak 2027'ye kadar."
+      },
+      "sources": [
+        {
+          "label": "Geizhals, güncel teklifler",
+          "url": "https://geizhals.de/3587143"
+        },
+        {
+          "label": "Geizhals, fiyat geçmişi",
+          "url": "https://geizhals.de/?phist=3587143"
+        },
+        {
+          "label": "MacRumors, ABD fiyatı",
+          "url": "https://macrumors.com/2026/11/19/airpods-black-friday-deals"
+        },
+        {
+          "label": "§ 11 PAngV, 30 gün kuralı",
+          "url": "https://www.gesetze-im-internet.de/pangv_2022/__11.html"
+        }
+      ]
+    },
+    {
+      "name": "Robot süpürge, 300 € altı",
+      "country": "Hollanda",
+      "reason": "Hangisi olsun, emin değilim",
+      "picked": "Örnek model: Dreame D20 Pro Plus (süpürme, hafif paspas, kendini boşaltan istasyon).",
+      "verdict": "WAIT",
+      "verdict_reason": "199 € eylülden beri her günkü fiyatı ve olmazsa olmaz özelliklerini henüz seçmedin.",
+      "hint": "önce özellikleri seç",
+      "currency": "EUR",
+      "prices": [
+        {
+          "kind": "today",
+          "label": "Bugün, Coolblue ve bol",
+          "value": 199,
+          "prefix": "",
+          "date": "2026-11-21",
+          "url": "https://www.coolblue.nl/product/968563/dreame-d20-pro-plus.html"
+        },
+        {
+          "kind": "low",
+          "label": "30 günün en düşüğü",
+          "value": 179,
+          "prefix": "",
+          "date": "2026-10-29",
+          "url": "https://tweakers.net/pricewatch/2253514/dreame-d20-pro-plus-zwart.html"
+        },
+        {
+          "kind": "alt",
+          "label": "Yenilenmiş, Coolblue",
+          "value": 190,
+          "prefix": "",
+          "date": "2026-11-21",
+          "url": "https://www.coolblue.nl/product/968563/dreame-d20-pro-plus.html"
+        },
+        {
+          "kind": "abroad",
+          "label": "Yurt dışı",
+          "value": null,
+          "prefix": "",
+          "date": "",
+          "url": ""
+        }
+      ],
+      "checks": {
+        "need": "Belirsiz. Önce neye ihtiyacın olduğuna karar ver: paspas, kendini boşaltan istasyon, evcil hayvan tüyü.",
+        "price": "Coolblue ve bol'da 199 €. 30 ve 90 günün en düşüğü 179 € (29 Ekim). Eylülden beri uzun süreler 199 €.",
+        "same": "\"D20 Pro Plus\" yazdığına bak; istasyonsuz \"D20 Pro\" ya da \"D20\" daha ucuz ve başka ürün.",
+        "alt": "Coolblue yenilenmiş 190 €'dan. Paspas yıkayan istasyon istersen Mova E50 Ultra 299 €, fiyat geçmişi kontrol edilmedi.",
+        "timing": "Coolblue'da 30 gün ücretsiz iade. Yeni model zamanlaması kontrol edilmedi."
+      },
+      "sources": [
+        {
+          "label": "Coolblue, Dreame D20 Pro Plus",
+          "url": "https://www.coolblue.nl/product/968563/dreame-d20-pro-plus.html"
+        },
+        {
+          "label": "Tweakers Pricewatch, fiyat geçmişi",
+          "url": "https://tweakers.net/pricewatch/2253514/dreame-d20-pro-plus-zwart.html"
+        },
+        {
+          "label": "ACM, adil indirim kuralı",
+          "url": "https://www.acm.nl/nl/publicaties/acm-wil-eerlijke-kortingen-om-consumenten-te-beschermen-tegen-misleiding"
+        }
+      ]
+    }
+  ],
+  "total": "Hiçbir ürün AL çıkmadı, toplam 0. Kulaklığı planladığın gibi 28 Kasım'a kadar alırsan bugünkü fiyatla yaklaşık 14.400 TL.",
+  "before_you_pay": [
+    "Türkiye: satıcının Sony Türkiye distribütör garantisi verdiğine ve kodun WH-1000XM5B/S olduğuna bak.",
+    "Ödeme günü fiyat geçmişine kendin bak: Akakçe (TR), Geizhals (DE), Tweakers (NL).",
+    "İade süresini ürünün kendi sayfasında kontrol et, özellikle pazaryeri satıcılarında."
+  ],
+  "ui": {}
+}
+</script>
+<style>
+:root{
+  --paper:#EEF1F5; --surface:#FFFFFF; --ink:#121826; --muted:#566074; --line:#D3D9E2;
+  --tag:#FFDD3C; --tag-ink:#121826; --abroad:#3A6FD8; --alt:#7B57C9; --other:#8C96A8;
+  --buy:#1D7F47; --wait:#A86A12; --skip:#4F5B6E; --sus:#BF3226;
+  --display:"Avenir Next Condensed","Arial Narrow","Roboto Condensed",system-ui,sans-serif;
+  --body:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,"Roboto Mono",monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#0E121A; --surface:#171D28; --ink:#E7EBF2; --muted:#9AA4B6; --line:#2A3242;
+  --abroad:#6F9BFF; --alt:#A88BF0; --other:#6D7789;
+  --buy:#4CC27F; --wait:#E3A23B; --skip:#93A0B5; --sus:#F06A5C; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#0E121A; --surface:#171D28; --ink:#E7EBF2; --muted:#9AA4B6; --line:#2A3242;
+  --abroad:#6F9BFF; --alt:#A88BF0; --other:#6D7789;
+  --buy:#4CC27F; --wait:#E3A23B; --skip:#93A0B5; --sus:#F06A5C; color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--paper);color:var(--ink);font:15px/1.55 var(--body);-webkit-font-smoothing:antialiased}
+a{color:inherit;text-underline-offset:3px}
+.wrap{max-width:980px;margin:0 auto;padding:28px 16px 48px}
+h1,h2,h3{font-family:var(--display);font-weight:800;letter-spacing:-.01em;line-height:1.08;margin:0}
+p{margin:0}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.eyebrow{font:600 11px/1.3 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+
+/* header */
+.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px 24px}
+.brand{display:flex;align-items:center;gap:10px}
+.brand i{width:24px;height:17px;background:var(--tag);display:inline-block;position:relative;clip-path:polygon(28% 0,100% 0,100% 100%,28% 100%,0 50%)}
+.brand i::after{content:"";position:absolute;left:30%;top:50%;width:4px;height:4px;margin-top:-2px;border-radius:50%;background:var(--tag-ink)}
+h1{font-size:clamp(30px,6vw,44px)}
+.meta{display:flex;flex-wrap:wrap;gap:6px 18px;font:500 12.5px/1.4 var(--mono);color:var(--muted)}
+.meta b{color:var(--ink);font-weight:600}
+.private{margin-top:10px;font-size:13px;color:var(--muted)}
+
+/* summary */
+.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:10px;margin-top:22px}
+.sum{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;text-decoration:none;min-width:0}
+.sum:hover{border-color:var(--ink)}
+.sum .nm{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sum .ct{font:500 12px/1.3 var(--mono);color:var(--muted)}
+
+.pill{display:inline-block;flex:none;font:800 13px/1 var(--display);letter-spacing:.08em;padding:6px 9px 5px;border-radius:5px;border:2px solid currentColor;transform:rotate(-3deg);white-space:nowrap}
+.v-BUY{color:var(--buy)}.v-WAIT{color:var(--wait)}.v-SKIP{color:var(--skip)}.v-SUSPICIOUS{color:var(--sus)}
+
+/* item card */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;margin-top:22px;overflow:hidden}
+.card-head{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:start;padding:20px 20px 16px}
+.card-head h2{font-size:clamp(22px,4vw,28px);margin-top:6px}
+.reason{font:400 13px/1.45 var(--mono);color:var(--muted);margin-top:6px}
+.picked{font-size:13px;color:var(--muted);margin-top:4px}
+.stamp{text-align:center}
+.stamp .pill{font-size:19px;padding:9px 13px 8px;border-width:3px;background:var(--surface)}
+.stamp small{display:block;max-width:150px;margin-top:8px;font:500 11px/1.35 var(--mono);color:var(--muted)}
+.verdict-line{padding:0 20px 18px;font-weight:600;font-size:15.5px}
+
+/* price bars */
+.bars{border-top:1.5px dashed var(--line);padding:18px 20px 14px;display:grid;gap:12px}
+.bars-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px}
+.gap{font:600 12px/1 var(--mono);padding:5px 8px;border-radius:999px;background:var(--paper);border:1px solid var(--line)}
+.gap.up{color:var(--sus)}.gap.down{color:var(--buy)}
+.bar{display:grid;grid-template-columns:minmax(0,190px) minmax(0,1fr) auto;gap:12px;align-items:center}
+.bar .lb{font-size:13px;line-height:1.3;color:var(--muted);min-width:0}
+.bar .lb small{display:block;font:400 11px/1.3 var(--mono);opacity:.85}
+.track{height:14px;border-radius:4px;background:var(--paper);position:relative;overflow:hidden}
+.fill{position:absolute;inset:0 auto 0 0;border-radius:4px;transform-origin:left;animation:grow .7s cubic-bezier(.3,.9,.3,1) both}
+@keyframes grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.k-today .fill{background:var(--ink)}
+.k-low .fill{background:var(--tag);box-shadow:inset 0 0 0 1px rgba(18,24,38,.18)}
+.k-abroad .fill{background:var(--abroad)}
+.k-alt .fill{background:var(--alt)}
+.k-other .fill{background:var(--other)}
+.k-none .track{background:repeating-linear-gradient(-45deg,transparent 0 6px,var(--line) 6px 7px);border:1px dashed var(--line)}
+.bar .val{font:600 14px/1.2 var(--mono);font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+.bar .val a{text-decoration:none;border-bottom:1px solid var(--line)}
+.bar .val a:hover{border-color:var(--ink)}
+.bar .val .nf{color:var(--muted);font-weight:500}
+.legend{font:400 11.5px/1.4 var(--mono);color:var(--muted)}
+@media (max-width:600px){
+  .bar{grid-template-columns:minmax(0,1fr) auto;gap:6px 12px}
+  .bar .lb{grid-column:1 / -1;grid-row:1}
+  .bar .track{grid-column:1;grid-row:2}
+  .bar .val{grid-column:2;grid-row:2}
+  .card-head{grid-template-columns:minmax(0,1fr)}
+  .stamp{text-align:left}
+}
+
+/* checks */
+.checks{border-top:1.5px dashed var(--line);padding:16px 20px;display:grid;gap:10px;margin:0}
+.check{display:grid;grid-template-columns:28px minmax(0,1fr);gap:10px}
+.check .n{font:700 12px/1 var(--mono);width:24px;height:24px;border-radius:50%;border:1.5px solid var(--ink);display:grid;place-items:center;margin-top:1px}
+.check dt{font-weight:600;font-size:14px}
+.check dd{margin:2px 0 0;color:var(--muted);font-size:14px}
+
+/* sources */
+details.src{border-top:1.5px dashed var(--line);padding:12px 20px 16px}
+details.src summary{cursor:pointer;font:600 12px/1.4 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+details.src ul{margin:10px 0 0;padding-left:18px;font-size:13.5px;display:grid;gap:4px}
+details.src a{word-break:break-word}
+
+/* end */
+.end{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px;margin-top:22px}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+.box h3{font-size:20px;margin-bottom:8px}
+.box ol{margin:0;padding-left:20px;display:grid;gap:6px;font-size:14px}
+.foot{margin-top:26px;font:400 12px/1.5 var(--mono);color:var(--muted)}
+:focus-visible{outline:3px solid var(--tag);outline-offset:2px;border-radius:3px}
+@media (prefers-reduced-motion:reduce){.fill{animation:none}}
+</style>
+</head>
+<body>
+<div class="wrap" id="root"></div>
+<script>
+(function(){
+  var UI = {
+    en: {
+      run: "Checked", decide: "Decide by", budget: "Budget", none: "not given",
+      private: "Your own page. It was made in your own AI chat; nothing on it is sent or stored anywhere.",
+      verdict: {BUY: "BUY", WAIT: "WAIT", SKIP: "SKIP", SUSPICIOUS: "SUSPICIOUS"},
+      prices: "Price check", vsLow: "vs 30-day low", notFound: "not found", seen: "seen",
+      legend: "Bars are to scale within each item. Click a price to open its source.",
+      checks: {need: "Need", price: "Real price", same: "Same product?", alt: "Alternative", timing: "Timing"},
+      sources: "Sources", total: "Total", before: "Before you pay",
+      foot: "Deal Check · prices change by the hour, so open each link before you pay. AI can be wrong; this is a second opinion."
+    },
+    tr: {
+      run: "Kontrol", decide: "Karar tarihi", budget: "Bütçe", none: "verilmedi",
+      private: "Sana ait bir sayfa. Kendi yapay zeka sohbetinde hazırlandı; içindeki hiçbir bilgi bir yere gönderilmez ya da kaydedilmez.",
+      verdict: {BUY: "AL", WAIT: "BEKLE", SKIP: "ATLA", SUSPICIOUS: "ŞÜPHELİ"},
+      prices: "Fiyat karşılaştırması", vsLow: "30 günün en düşüğüne göre", notFound: "bulunamadı", seen: "görüldü",
+      legend: "Çubuklar her ürün içinde aynı ölçekte. Kaynağını açmak için fiyata tıkla.",
+      checks: {need: "İhtiyaç", price: "Gerçek fiyat", same: "Aynı ürün mü?", alt: "Alternatif", timing: "Zamanlama"},
+      sources: "Kaynaklar", total: "Toplam", before: "Ödemeden önce",
+      foot: "Deal Check · fiyatlar saatlik değişir, ödemeden önce her linki aç. Yapay zeka yanılabilir; bu bir ikinci görüş."
+    }
+  };
+
+  var D = {};
+  try { D = JSON.parse(document.getElementById('deal-data').textContent); } catch(e) { D = {items: []}; }
+  var base = UI[D.lang] || UI.en;
+  var T = merge(merge({}, base), D.ui || {});
+  var loc = D.locale || (D.lang === 'tr' ? 'tr-TR' : 'en-GB');
+  document.documentElement.lang = D.lang || 'en';
+  if (D.title) document.title = D.title;
+
+  function merge(a, b){ for (var k in b) { if (b[k] && typeof b[k] === 'object' && !Array.isArray(b[k])) { a[k] = merge(merge({}, a[k] || {}), b[k]); } else { a[k] = b[k]; } } return a; }
+  function el(tag, cls, text){ var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+  function safeUrl(u){ return typeof u === 'string' && /^https?:\/\//i.test(u) ? u : null; }
+  function link(text, url){
+    var u = safeUrl(url);
+    if (!u) return el('span', null, text);
+    var a = el('a', null, text); a.href = u; a.target = '_blank'; a.rel = 'noopener noreferrer'; return a;
+  }
+  function day(s){
+    if (!s) return '';
+    var d = new Date(s + 'T12:00:00');
+    if (isNaN(d)) return s;
+    try { return d.toLocaleDateString(loc, {day: 'numeric', month: 'short', year: 'numeric'}); } catch(e) { return s; }
+  }
+  function money(v, cur){
+    var frac = Math.round(v) === v ? 0 : 2;
+    var o = {style: 'currency', currency: cur || 'EUR', currencyDisplay: 'narrowSymbol', minimumFractionDigits: frac, maximumFractionDigits: frac};
+    try { return new Intl.NumberFormat(loc, o).format(v); } catch(e) {}
+    try { o.currencyDisplay = 'symbol'; return new Intl.NumberFormat(loc, o).format(v); }
+    catch(e) { return v.toFixed(frac) + ' ' + (cur || ''); }
+  }
+  var vkey = function(v){ v = String(v || '').toUpperCase(); return T.verdict[v] ? v : 'WAIT'; };
+
+  var root = document.getElementById('root');
+
+  // header
+  var top = el('header', 'top');
+  var left = el('div');
+  var brand = el('div', 'brand'); brand.appendChild(el('i')); brand.appendChild(el('span', 'eyebrow', 'Deal Check'));
+  left.appendChild(brand);
+  var h1 = el('h1', null, D.title || 'Deal Check'); h1.style.marginTop = '10px'; left.appendChild(h1);
+  top.appendChild(left);
+  var meta = el('div', 'meta');
+  function m(k, v){ var s = el('span'); s.appendChild(document.createTextNode(k + ' ')); s.appendChild(el('b', null, v)); meta.appendChild(s); }
+  if (D.run_date) m(T.run, day(D.run_date));
+  if (D.decide_by) m(T.decide, day(D.decide_by));
+  m(T.budget, D.budget || T.none);
+  top.appendChild(meta);
+  root.appendChild(top);
+  root.appendChild(el('p', 'private', T.private));
+
+  // summary
+  var items = Array.isArray(D.items) ? D.items : [];
+  var sum = el('nav', 'summary');
+  items.forEach(function(it, i){
+    var a = el('a', 'sum'); a.href = '#item-' + (i + 1);
+    var t = el('div'); t.style.minWidth = '0';
+    t.appendChild(el('div', 'nm', it.name || ''));
+    t.appendChild(el('div', 'ct', it.country || ''));
+    a.appendChild(t);
+    var k = vkey(it.verdict);
+    a.appendChild(el('span', 'pill v-' + k, T.verdict[k]));
+    sum.appendChild(a);
+  });
+  root.appendChild(sum);
+
+  // cards
+  items.forEach(function(it, i){
+    var k = vkey(it.verdict);
+    var card = el('article', 'card'); card.id = 'item-' + (i + 1);
+    var head = el('div', 'card-head');
+    var hl = el('div');
+    hl.appendChild(el('p', 'eyebrow', [it.country, day(D.run_date)].filter(Boolean).join(' · ')));
+    hl.appendChild(el('h2', null, it.name || ''));
+    if (it.reason) hl.appendChild(el('p', 'reason', '"' + it.reason + '"'));
+    if (it.picked) hl.appendChild(el('p', 'picked', it.picked));
+    head.appendChild(hl);
+    var st = el('div', 'stamp');
+    st.appendChild(el('span', 'pill v-' + k, T.verdict[k]));
+    if (it.hint) st.appendChild(el('small', null, it.hint));
+    head.appendChild(st);
+    card.appendChild(head);
+    if (it.verdict_reason) card.appendChild(el('p', 'verdict-line', it.verdict_reason));
+
+    // bars
+    var prices = Array.isArray(it.prices) ? it.prices : [];
+    if (prices.length) {
+      var bars = el('div', 'bars');
+      var bh = el('div', 'bars-head');
+      bh.appendChild(el('span', 'eyebrow', T.prices));
+      var today = prices.filter(function(p){ return p.kind === 'today' && typeof p.value === 'number'; })[0];
+      var low = prices.filter(function(p){ return p.kind === 'low' && typeof p.value === 'number'; })[0];
+      if (today && low && low.value > 0) {
+        var pct = Math.round((today.value - low.value) / low.value * 100);
+        var g = el('span', 'gap ' + (pct > 0 ? 'up' : 'down'), (pct > 0 ? '+' : '') + pct + '% ' + T.vsLow);
+        bh.appendChild(g);
+      }
+      bars.appendChild(bh);
+      var max = 0;
+      prices.forEach(function(p){ if (typeof p.value === 'number' && p.value > max) max = p.value; });
+      prices.forEach(function(p){
+        var has = typeof p.value === 'number';
+        var row = el('div', 'bar k-' + (has ? (p.kind || 'other') : 'none'));
+        var lb = el('div', 'lb', p.label || '');
+        if (has && p.date) lb.appendChild(el('small', null, T.seen + ' ' + day(p.date)));
+        row.appendChild(lb);
+        var tr = el('div', 'track');
+        if (has && max > 0) { var f = el('div', 'fill'); f.style.width = Math.max(2, p.value / max * 100) + '%'; tr.appendChild(f); }
+        row.appendChild(tr);
+        var val = el('div', 'val');
+        if (has) val.appendChild(link((p.prefix || '') + money(p.value, it.currency), p.url));
+        else val.appendChild(el('span', 'nf', T.notFound));
+        row.appendChild(val);
+        bars.appendChild(row);
+      });
+      bars.appendChild(el('p', 'legend', T.legend));
+      card.appendChild(bars);
+    }
+
+    // five checks
+    var c = it.checks || {};
+    var dl = el('dl', 'checks');
+    ['need', 'price', 'same', 'alt', 'timing'].forEach(function(key, n){
+      if (!c[key]) return;
+      var row = el('div', 'check');
+      row.appendChild(el('span', 'n', String(n + 1)));
+      var body = el('div');
+      body.appendChild(el('dt', null, T.checks[key]));
+      body.appendChild(el('dd', null, c[key]));
+      row.appendChild(body);
+      dl.appendChild(row);
+    });
+    card.appendChild(dl);
+
+    // sources
+    var src = Array.isArray(it.sources) ? it.sources.filter(function(s){ return safeUrl(s.url); }) : [];
+    if (src.length) {
+      var det = el('details', 'src');
+      det.appendChild(el('summary', null, T.sources + ' (' + src.length + ')'));
+      var ul = el('ul');
+      src.forEach(function(s){ var li = el('li'); li.appendChild(link(s.label || s.url, s.url)); ul.appendChild(li); });
+      det.appendChild(ul);
+      card.appendChild(det);
+    }
+    root.appendChild(card);
+  });
+
+  // total + before you pay
+  var end = el('div', 'end');
+  if (D.total) { var b1 = el('section', 'box'); b1.appendChild(el('h3', null, T.total)); b1.appendChild(el('p', null, D.total)); end.appendChild(b1); }
+  var byp = Array.isArray(D.before_you_pay) ? D.before_you_pay.slice(0, 3) : [];
+  if (byp.length) { var b2 = el('section', 'box'); b2.appendChild(el('h3', null, T.before)); var ol = el('ol'); byp.forEach(function(s){ ol.appendChild(el('li', null, s)); }); b2.appendChild(ol); end.appendChild(b2); }
+  if (end.children.length) root.appendChild(end);
+  root.appendChild(el('p', 'foot', T.foot));
+})();
+</script>
+</body>
+</html>

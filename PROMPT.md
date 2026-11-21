@@ -84,6 +84,12 @@ Give each item exactly one verdict with one sentence of reason:
 2. **One short card per item** with the five checks, 1-2 lines each.
 3. **Total:** what buying every BUY item would cost, compared with my budget.
 4. **Before you pay:** at most 3 things I should check myself.
+5. **My own page (if you can show HTML: Claude artifact, ChatGPT or Gemini
+   canvas):** fetch
+   https://raw.githubusercontent.com/feridunocek/deal-check-tool/main/app/deal-check.html,
+   replace only the JSON in `<script id="deal-data">` with these results and
+   show the whole file as one artifact / canvas. Nothing in it loads from or
+   sends to another server. If you cannot fetch it or show HTML, skip this.
 
 ## My list
 
