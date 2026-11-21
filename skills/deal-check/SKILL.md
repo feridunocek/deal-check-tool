@@ -20,7 +20,7 @@ If an item is a category, not a product ("a robot vacuum under 300 EUR"), pick 1
 1. **Need.** Would they buy it at full price next month? If not, the discount is the reason, not the need. Use any reason they gave.
 2. **Real price.** Current price at 2-3 sellers in their country. The struck-through "was" price is not evidence. Find price history; compare today's price with the 30-day low (and 90-day low where available). Many jurisdictions (EU countries, Turkey and others) require a "discount" to be measured against the seller's own recent lowest price; the period differs by country and changes, so search the current rule. The 30-day low found is usually market-wide: only call a discount misleading when that seller's own "was" price is clearly above it.
 3. **Same product?** Exact model number. Flag sale-day "special editions" with lower specs under a familiar name.
-4. **Alternative.** One better option if it exists: previous generation, a competitor, refurbished or second-hand, or the same model at a cheaper trustworthy seller.
+4. **Alternative.** One better option if it exists: previous generation, a competitor, refurbished or second-hand, or the same model at a cheaper trustworthy seller. Also check the same model **abroad**: 1-2 countries where it is usually cheaper and that ship to the user (or where they might travel). Compare the landed price, not the shelf price, for both routes: by parcel (shipping, customs duty, import VAT and carrier fees; export orders often drop the origin country's VAT) and in a traveller's luggage (their country's duty-free allowance). Use the current rules of their country and the latest official exchange rate, with its date. Say whether the warranty is valid in their country and whether the model matches (plug, keyboard layout, regional version). Only call it cheaper abroad if the landed price is clearly lower.
 5. **Timing.** New model expected within about 3 months? Does this category usually get cheaper later (Cyber Monday, December, January)? Return window?
 
 ## Verdict (one per item, one sentence of reason)
@@ -40,7 +40,7 @@ If an item is a category, not a product ("a robot vacuum under 300 EUR"), pick 1
 
 ## Output
 
-1. Summary table: Item | Best price found (seller + link) | 30-day low | Verdict | Why (one line)
+1. Summary table: Item | Best price found (seller + link) | 30-day low | Abroad, landed (country) | Verdict | Why (one line)
 2. One short card per item: the five checks, 1-2 lines each.
 3. Total of all BUY items vs budget.
 4. "Before you pay": at most 3 things to check themselves.

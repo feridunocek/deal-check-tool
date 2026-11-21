@@ -24,7 +24,7 @@ different:
 | 1 | **Need** — would I buy this at full price next month? | Buying because of the discount, not the need |
 | 2 | **Real price** — what was the lowest price in the last 30 days? | Prices raised before the sale, then "reduced" |
 | 3 | **Same product?** — is this the exact model I think it is? | Cheaper sale-day variants under a familiar name |
-| 4 | **Alternative** — is there a better option for the same need? | Previous generation, refurbished, another seller |
+| 4 | **Alternative** — is there a better option for the same need? | Previous generation, refurbished, another seller, the same model abroad (with shipping, customs and tax) |
 | 5 | **Timing** — will it be cheaper or better soon? | New models next month, better deals in January |
 
 The tool is the questions. The AI only does the legwork.
@@ -86,7 +86,7 @@ kontrol eder ve tıklayıp doğrulayabileceğin linklerle **AL**, **BEKLE**,
 1. **İhtiyaç:** Bunu gelecek ay tam fiyata alır mıydım?
 2. **Gerçek fiyat:** Son 30 günün en düşük fiyatı neydi? Üstü çizili fiyat kanıt değildir.
 3. **Aynı ürün mü:** Model numarası tam olarak düşündüğüm ürün mü?
-4. **Alternatif:** Aynı ihtiyaç için daha iyi bir seçenek var mı? (önceki nesil, yenilenmiş, başka satıcı)
+4. **Alternatif:** Aynı ihtiyaç için daha iyi bir seçenek var mı? (önceki nesil, yenilenmiş, başka satıcı, ya da aynı ürünün yurt dışı fiyatı: kargo, gümrük ve vergi dahil, garanti geçerli mi)
 5. **Zamanlama:** Yakında ucuzlayacak ya da yenisi çıkacak mı?
 
 **Nasıl kullanılır:** [`PROMPT.md`](PROMPT.md) dosyasındaki metni kopyala, web
@@ -100,4 +100,4 @@ dökersen, gerisini yapay zeka senin yerine yürütür.
 
 ---
 
-MIT License · Feridun Öçek · [ocekdigital.com](https://ocekdigital.com)
+MIT License · Feridun Öcek · [ocekdigital.com](https://ocekdigital.com)

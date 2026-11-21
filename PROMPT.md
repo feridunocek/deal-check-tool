@@ -41,7 +41,16 @@ pick 1-2 concrete models that fit and say in one line why you picked them.
    name. Flag it if the deal is on a variant I would not expect.
 4. **Alternative.** One better option if it exists: the previous generation, a
    competitor, refurbished or second-hand, or the same model at a cheaper
-   trustworthy seller.
+   trustworthy seller. Also check the same model **abroad**: its price in 1-2
+   countries where it is usually cheaper and that ship to me (or where I or
+   someone I know might travel). Compare the *landed* price, not the shelf
+   price, for both routes: by parcel (shipping, customs duty, import VAT and
+   carrier fees; export orders often drop the origin country's VAT) and in a
+   traveller's luggage (my country's duty-free allowance). Use the current
+   rules of my country and the latest official exchange rate, with its date. Say whether the warranty
+   is valid in my country and whether the model matches mine (plug, keyboard
+   layout, regional version). Only call it cheaper abroad if the landed price
+   is clearly lower.
 5. **Timing.** Is a new model expected within about 3 months? Does this kind of
    item usually get cheaper later (Cyber Monday, December, January sales)? What
    is the return window if I change my mind?
@@ -71,7 +80,7 @@ Give each item exactly one verdict with one sentence of reason:
 ## Output
 
 1. **Summary table:** Item | Best price found (seller + link) | 30-day low |
-   Verdict | Why (one line)
+   Abroad, landed (country) | Verdict | Why (one line)
 2. **One short card per item** with the five checks, 1-2 lines each.
 3. **Total:** what buying every BUY item would cost, compared with my budget.
 4. **Before you pay:** at most 3 things I should check myself.
