@@ -90,6 +90,8 @@ Give each item exactly one verdict with one sentence of reason:
    replace only the JSON in `<script id="deal-data">` with these results and
    show the whole file as one artifact / canvas. Nothing in it loads from or
    sends to another server. If you cannot fetch it or show HTML, skip this.
+   When I later write "check prices again" in this chat, keep every earlier
+   `history` entry of each item, add today's at the end and redraw the page.
 
 ## My list
 

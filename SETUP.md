@@ -61,9 +61,21 @@ the web searches the checks need.
      nothing sent anywhere.
    - If you cannot show HTML at all, skip this step. The chat answer is enough.
 
-6. **Later in the same chat**, when the person adds or removes an item or asks
-   to re-check prices, run the checks again for what changed and redraw the
-   whole page with the updated data.
+   - Give every item a `history` with one entry for this run:
+     `{"date": run_date, "value": today's price, "url": its source}`.
+
+6. **Later in the same chat**, when the person writes "check prices again"
+   (or the same in their language), adds or removes an item: run the checks
+   again for what changed and redraw the whole page with the updated data.
+   - Keep the history. Copy every earlier `history` entry of each item
+     unchanged and add today's entry at the end. Never drop, edit or invent
+     an earlier entry; if you re-check twice on one day, replace only that
+     day's entry. A new item starts with one entry; a removed item goes.
+   - Update `run_date` to today. The page then shows each item's earlier
+     prices and the change since the last check.
+   - Say in one line of the chat answer what moved since the last check.
+   - The history lives only in this chat. If the person opens a new chat,
+     it starts empty unless they paste their previous page into it.
 
 ## Rules that do not change
 

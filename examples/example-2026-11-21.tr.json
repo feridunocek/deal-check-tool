@@ -35,6 +35,10 @@
         {"label": "TCMB kuru, 20.11.2026", "url": "https://www.tcmb.gov.tr/kurlar/today.xml"},
         {"label": "Ticaret Bakanlığı, yolcu muafiyeti", "url": "https://ticaret.gov.tr/gumruk-islemleri/sikca-sorulan-sorular/bireysel/yolcu-muafiyetleri"},
         {"label": "NTV, 10 günlük indirim kuralı", "url": "https://www.ntv.com.tr/ntvpara/ticaret-bakanligi-acikladi-1-agustosta-zorunlu-olacak-1735036"}
+      ],
+      "history": [
+        {"date": "2026-11-19", "value": 12950.10, "url": "https://www.akakce.com/bluetooth-kulaklik/en-ucuz-sony-wh-1000xm5-kulak-ustu-fiyati,1868730591.html"},
+        {"date": "2026-11-21", "value": 14389, "url": "https://www.akakce.com/bluetooth-kulaklik/en-ucuz-sony-wh-1000xm5-kulak-ustu-fiyati,1868730591.html"}
       ]
     },
     {
@@ -64,6 +68,10 @@
         {"label": "Geizhals, fiyat geçmişi", "url": "https://geizhals.de/?phist=3587143"},
         {"label": "MacRumors, ABD fiyatı", "url": "https://macrumors.com/2026/11/19/airpods-black-friday-deals"},
         {"label": "§ 11 PAngV, 30 gün kuralı", "url": "https://www.gesetze-im-internet.de/pangv_2022/__11.html"}
+      ],
+      "history": [
+        {"date": "2026-11-20", "value": 187.19, "url": "https://geizhals.de/?phist=3587143"},
+        {"date": "2026-11-21", "value": 199.99, "url": "https://geizhals.de/3587143"}
       ]
     },
     {
@@ -92,6 +100,9 @@
         {"label": "Coolblue, Dreame D20 Pro Plus", "url": "https://www.coolblue.nl/product/968563/dreame-d20-pro-plus.html"},
         {"label": "Tweakers Pricewatch, fiyat geçmişi", "url": "https://tweakers.net/pricewatch/2253514/dreame-d20-pro-plus-zwart.html"},
         {"label": "ACM, adil indirim kuralı", "url": "https://www.acm.nl/nl/publicaties/acm-wil-eerlijke-kortingen-om-consumenten-te-beschermen-tegen-misleiding"}
+      ],
+      "history": [
+        {"date": "2026-11-21", "value": 199, "url": "https://www.coolblue.nl/product/968563/dreame-d20-pro-plus.html"}
       ]
     }
   ],
